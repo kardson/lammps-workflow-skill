@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "record_type": "md_plan",
+  "status": "DRAFT",
+  "id": null,
+  "question": null,
+  "materials": {
+    "substrate": null,
+    "growing_material": null,
+    "orientation": null,
+    "termination": null,
+    "source_structures": []
+  },
+  "deposition": {
+    "mechanism": null,
+    "incident_species": null,
+    "flux": null,
+    "flux_units": null,
+    "arrival_energy_or_velocity": null,
+    "injection_region": null,
+    "seeds": []
+  },
+  "model": {
+    "kind": null,
+    "model_card": null,
+    "interface": null,
+    "suitability_evidence": []
+  },
+  "simulation": {
+    "units": null,
+    "atom_style": null,
+    "type_to_element": null,
+    "boundary": null,
+    "cell": null,
+    "fixed_region": null,
+    "bath_region": null,
+    "mobile_region": null,
+    "temperature": null,
+    "timestep": null,
+    "stages": [],
+    "physical_duration": null
+  },
+  "acceptance": {
+    "numerical_validation": [],
+    "scientific_observables": [],
+    "uncertainty_plan": null,
+    "stop_conditions": []
+  },
+  "outputs": {
+    "required_files": [],
+    "cadence": null,
+    "restart_contract": null
+  },
+  "confirmation": null,
+  "execution_authorization": null,
+  "notes": "Nulls are unresolved scientific decisions; filling fields does not establish user confirmation or execution permission."
+}

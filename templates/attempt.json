@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_type": "execution_attempt",
+  "status": "NOT_LAUNCHED",
+  "attempt_id": null,
+  "plan": null,
+  "actual_confirmation": null,
+  "input_audit": null,
+  "execution_authorization": null,
+  "inputs": [],
+  "potential_identity": null,
+  "executable": null,
+  "interface_revision": null,
+  "precision": null,
+  "host": null,
+  "run_directory": null,
+  "command": null,
+  "resources": null,
+  "parent_attempt": null,
+  "parent_restart_identity": null,
+  "restart_audit": null,
+  "launch": {
+    "observed_utc": null,
+    "job_or_process_identity": null,
+    "evidence": null
+  },
+  "latest_observation": {
+    "observed_utc": null,
+    "state": "UNVERIFIED",
+    "evidence": null
+  },
+  "termination": {
+    "exit_code": null,
+    "evidence": null
+  },
+  "required_outputs": [],
+  "collected_outputs": [],
+  "missing_outputs": [],
+  "numerical_acceptance": "UNVERIFIED",
+  "scientific_acceptance": "UNVERIFIED"
+}

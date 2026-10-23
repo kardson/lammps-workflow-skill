@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_type": "potential_model_card",
+  "status": "CANDIDATE",
+  "id": null,
+  "kind": null,
+  "source": {
+    "repository_or_url": null,
+    "revision": null,
+    "license": null,
+    "citation": null
+  },
+  "identity": {
+    "file": null,
+    "bytes": null,
+    "sha256": null
+  },
+  "elements": [],
+  "type_to_element": null,
+  "units": null,
+  "atom_style": null,
+  "interface": {
+    "repository": null,
+    "revision": null,
+    "lammps_version": null,
+    "pair_style": null,
+    "pair_coeff_contract": null,
+    "backend": null,
+    "precision": null
+  },
+  "applicability": {
+    "fit_or_training_domain": null,
+    "target_system_evidence": [],
+    "missing_evidence": [],
+    "scientific_status": "UNVERIFIED"
+  },
+  "validation": {
+    "header_coverage": "UNVERIFIED",
+    "numerical_inference": "UNVERIFIED",
+    "mpi": "UNVERIFIED",
+    "dynamic_atom_count": "UNVERIFIED",
+    "open_boundary": "UNVERIFIED",
+    "restart": "UNVERIFIED"
+  },
+  "training_in_scope": false
+}

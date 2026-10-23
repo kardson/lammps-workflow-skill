@@ -1,0 +1,4 @@
+interface:
+  display_name: "LAMMPS MD Workflow"
+  short_description: "Plan and inspect LAMMPS deposition workflows with evidence"
+  default_prompt: "Use $lammps-md-workflow to inspect my environment and potentials, then prepare a traceable MD plan within my execution permissions."
