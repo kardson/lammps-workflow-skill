@@ -16,6 +16,7 @@ Enter at the relevant step; a status question does not require full onboarding. 
 - Environment/install/build: read [deployment](references/deployment.md). Compilation, executable help, numerical validation, and performance tests establish different facts. Never substitute a simulation for an environment check.
 - Existing empirical or ML potential: read [potentials](references/potentials.md). Record exact identity, provenance, interface, species mapping, units and suitability evidence. Training, fine-tuning and active learning are outside this skill.
 - Growth model, input preparation, or deposition analysis: read [deposition](references/deposition.md). Distinguish atomic/molecular beam insertion from reactive precursor chemistry. A command that inserts atoms does not establish CVD reaction physics.
+- Local preparation or file diagnostics: read [local-first tools](references/local-first.md). Prefer local structure/text/data work; static input and log summaries do not substitute for target-runtime or numerical validation. Check scope fields and exit codes before reporting a parser result.
 - Resume, run status, or result provenance: read [records](references/records.md). Historical running records do not justify a new launch; query the selected actual attempt once when asked. No generic SSH/launch adapter is shipped in this version.
 - First installation or project connection: read [installation](references/installation.md). Installing a skill does not authorize changing unrelated project rules or global configuration.
 

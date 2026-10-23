@@ -1,7 +1,7 @@
 {
   "skill": "lammps-md-workflow",
-  "version": "0.1.0",
-  "stage": "initial-preparation",
+  "version": "0.2.0",
+  "stage": "local-preparation-and-diagnostics",
   "repository": "https://github.com/kardson/lammps-workflow-skill",
   "skill_root": ".",
   "python_minimum": "3.10",
@@ -9,8 +9,10 @@
     "init_workspace.py",
     "check_environment.py",
     "inspect_potential.py",
-    "search_manual.py"
+    "search_manual.py",
+    "inspect_input.py",
+    "parse_log.py"
   ],
-  "validation_scope": "Local standard-library fixtures; no remote execution, MD, model inference or performance validation.",
+  "validation_scope": "Local standard-library input/log fixtures, static reference input and archived upstream log inspection; no remote execution, MD, model inference or performance validation.",
   "license": "UNSPECIFIED"
 }
