@@ -26,10 +26,11 @@
   ],
   "optional_dependencies": {
     "structure": ["ase", "numpy"],
-    "trajectory": ["numpy"],
+    "trajectory": ["ase", "numpy"],
+    "atomic_balance": ["ase"],
     "replica_statistics": ["scipy"],
-    "report": ["matplotlib"],
-    "software_preview": ["ovito", "PySide6", "matplotlib"]
+    "report": ["numpy", "matplotlib"],
+    "software_preview": ["ase", "ovito", "PySide6-Essentials", "matplotlib"]
   },
   "validation_scope": "Local input/log fixtures and artificial structural, trajectory, replica, candidate/archive, PNG/HTML and software-render checks. No target-host execution, energy/force inference, MD, performance or scientific validation.",
   "license": "UNSPECIFIED"

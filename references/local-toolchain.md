@@ -4,7 +4,7 @@ Use these helpers only within their stated adapters. Select explicit physical pa
 
 ## Dependencies and paths
 
-The original six tools remain standard-library based. New structure tools use ASE/NumPy; trajectory analysis uses NumPy; replica intervals use SciPy; plots use Matplotlib; software previews use OVITO/PySide6 plus Matplotlib's packaged font. The integrated engineering demo uses those modules and the artificial fixtures shipped in `tests/`. Install only the modules needed in a separate research environment. The private project's exact lock is distinct from a generic compatible dependency declaration.
+The original six tools remain standard-library based. New structure tools use ASE/NumPy; trajectory and atomic-balance type-map validation also use ASE (trajectory calculations additionally use NumPy). Replica intervals use SciPy; plots use NumPy/Matplotlib; software previews use ASE's element validation, OVITO, PySide6-Essentials/QtGui and Matplotlib's packaged font. The integrated engineering demo uses those modules and the artificial fixtures shipped in `tests/`. Install only the modules needed in a separate research environment. The private project's exact lock is distinct from a generic compatible dependency declaration.
 
 Configuration-relative source paths resolve beside the configuration, independently of the current working directory. Choose a new output directory outside the installed skill. Existing outputs are preserved. Source/configuration identities and method limits are retained. Failed trajectory/sweep preparations keep explicitly labeled partial outputs. Do not publish weights or local manifests into this public repository.
 
