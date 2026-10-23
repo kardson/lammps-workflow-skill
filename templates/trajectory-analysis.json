@@ -1,0 +1,13 @@
+{
+  "source_class": "research_output",
+  "units": "metal",
+  "type_order": null,
+  "film_elements": null,
+  "z_window_angstrom": null,
+  "reference_z_angstrom": null,
+  "height_quantile": null,
+  "height_grid": null,
+  "empty_cell_policy": "exclude",
+  "composition_z_edges_angstrom": null,
+  "max_atoms_per_frame": null
+}

@@ -1,0 +1,42 @@
+{
+  "purpose": "research_candidate",
+  "provenance": null,
+  "type_order": null,
+  "boundary": [
+    "p",
+    "p",
+    "f"
+  ],
+  "minimum_separation_angstrom": null,
+  "template_scope": "Supported atomic-beam adapter only; not a confirmed growth mechanism.",
+  "mechanism": "atomic_beam",
+  "structure_file": null,
+  "structure_format": null,
+  "potential": {
+    "kind": null,
+    "interface": null,
+    "provenance": null,
+    "license_reference": null,
+    "format": null,
+    "files": null,
+    "pair_style": null,
+    "pair_coeff": null,
+    "type_order": null
+  },
+  "fixed_z_bounds_angstrom": null,
+  "bath_z_bounds_angstrom": null,
+  "injection_bounds_angstrom": null,
+  "initial_temperature_K": null,
+  "velocity_seed": null,
+  "thermostat_seed": null,
+  "thermostat_damping_ps": null,
+  "temperature_extra_dof": null,
+  "timestep_ps": null,
+  "equilibrate_steps": null,
+  "deposition_steps": null,
+  "post_steps": null,
+  "beams": null,
+  "thermo_every": null,
+  "dump_every": null,
+  "restart_every": null
+}

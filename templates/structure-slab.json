@@ -1,0 +1,29 @@
+{
+  "purpose": "research_candidate",
+  "provenance": null,
+  "type_order": null,
+  "boundary": [
+    "p",
+    "p",
+    "f"
+  ],
+  "minimum_separation_angstrom": null,
+  "operation": "slab",
+  "source_file": null,
+  "source_format": null,
+  "source_boundary": [
+    "p",
+    "p",
+    "p"
+  ],
+  "miller": null,
+  "layers": null,
+  "repeat": null,
+  "trim_bottom_planes": null,
+  "trim_top_planes": null,
+  "plane_tolerance_angstrom": null,
+  "bottom_buffer_angstrom": null,
+  "vacuum_above_angstrom": null,
+  "termination_label": null,
+  "expected_top_elements": null
+}

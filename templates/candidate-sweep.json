@@ -1,0 +1,6 @@
+{
+  "purpose": "research_candidate",
+  "base_config_file": null,
+  "variants": [],
+  "note": "Supply explicit IDs and changes; no automatic job launch or implicit Cartesian grid."
+}

@@ -1,0 +1,20 @@
+{
+  "purpose": "research_candidate",
+  "provenance": null,
+  "type_order": null,
+  "boundary": [
+    "p",
+    "p",
+    "f"
+  ],
+  "minimum_separation_angstrom": null,
+  "operation": "interface",
+  "substrate_file": null,
+  "film_file": null,
+  "source_format": null,
+  "lateral_match": null,
+  "gap_angstrom": null,
+  "bottom_buffer_angstrom": null,
+  "vacuum_above_angstrom": null,
+  "film_xy_shift_angstrom": null
+}

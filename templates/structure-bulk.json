@@ -1,0 +1,15 @@
+{
+  "purpose": "research_candidate",
+  "provenance": null,
+  "type_order": null,
+  "boundary": [
+    "p",
+    "p",
+    "p"
+  ],
+  "minimum_separation_angstrom": null,
+  "operation": "bulk_zincblende",
+  "elements": null,
+  "lattice_a_angstrom": null,
+  "repeat": null
+}

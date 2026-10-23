@@ -1,7 +1,7 @@
 {
   "skill": "lammps-md-workflow",
-  "version": "0.2.0",
-  "stage": "local-preparation-and-diagnostics",
+  "version": "0.3.0",
+  "stage": "local-structures-inputs-analysis-and-delivery",
   "repository": "https://github.com/kardson/lammps-workflow-skill",
   "skill_root": ".",
   "python_minimum": "3.10",
@@ -11,8 +11,26 @@
     "inspect_potential.py",
     "search_manual.py",
     "inspect_input.py",
-    "parse_log.py"
+    "parse_log.py",
+    "prepare_structure.py",
+    "audit_structure.py",
+    "prepare_input_package.py",
+    "analyze_trajectory.py",
+    "analyze_balance.py",
+    "summarize_replicas.py",
+    "render_structure.py",
+    "generate_report.py",
+    "bundle_package.py",
+    "prepare_sweep.py",
+    "demo_local_pipeline.py"
   ],
-  "validation_scope": "Local standard-library input/log fixtures, static reference input and archived upstream log inspection; no remote execution, MD, model inference or performance validation.",
+  "optional_dependencies": {
+    "structure": ["ase", "numpy"],
+    "trajectory": ["numpy"],
+    "replica_statistics": ["scipy"],
+    "report": ["matplotlib"],
+    "software_preview": ["ovito", "PySide6", "matplotlib"]
+  },
+  "validation_scope": "Local input/log fixtures and artificial structural, trajectory, replica, candidate/archive, PNG/HTML and software-render checks. No target-host execution, energy/force inference, MD, performance or scientific validation.",
   "license": "UNSPECIFIED"
 }
