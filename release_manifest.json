@@ -1,7 +1,7 @@
 {
   "skill": "lammps-md-workflow",
-  "version": "0.3.0",
-  "stage": "local-structures-inputs-analysis-and-delivery",
+  "version": "0.4.0",
+  "stage": "local-toolchain-model-preflight-and-reference-runtime-validation",
   "repository": "https://github.com/kardson/lammps-workflow-skill",
   "skill_root": ".",
   "python_minimum": "3.10",
@@ -22,16 +22,37 @@
     "generate_report.py",
     "bundle_package.py",
     "prepare_sweep.py",
-    "demo_local_pipeline.py"
+    "demo_local_pipeline.py",
+    "preflight_nep_model.py"
   ],
   "optional_dependencies": {
-    "structure": ["ase", "numpy"],
-    "trajectory": ["ase", "numpy"],
-    "atomic_balance": ["ase"],
-    "replica_statistics": ["scipy"],
-    "report": ["numpy", "matplotlib"],
-    "software_preview": ["ase", "ovito", "PySide6-Essentials", "matplotlib"]
+    "structure": [
+      "ase",
+      "numpy"
+    ],
+    "trajectory": [
+      "ase",
+      "numpy"
+    ],
+    "atomic_balance": [
+      "ase"
+    ],
+    "replica_statistics": [
+      "scipy"
+    ],
+    "report": [
+      "numpy",
+      "matplotlib"
+    ],
+    "software_preview": [
+      "ase",
+      "ovito",
+      "PySide6-Essentials",
+      "matplotlib"
+    ]
   },
-  "validation_scope": "Local input/log fixtures and artificial structural, trajectory, replica, candidate/archive, PNG/HTML and software-render checks. No target-host execution, energy/force inference, MD, performance or scientific validation.",
-  "license": "UNSPECIFIED"
+  "validation_scope": "Bundled local tooling is verified with artificial fixtures; new NEP preflight checks file identity/header only. Separate reference deployment has completed bounded CPU/GPU NEP89 inference, MPI, open-boundary insertion, same-engine restart and GPU file-guard repair regressions. No general production, scientific suitability, long-run, multi-GPU or performance acceptance.",
+  "license": "UNSPECIFIED",
+  "reference_deployment_evidence": "references/validated-deployment.md",
+  "runtime_artifacts_bundled": false
 }

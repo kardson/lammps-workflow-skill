@@ -8,6 +8,7 @@ All bundled tools support `--help`. Resolve them from the skill root, using the 
 | Observe local or compute-host environment | `tools/check_environment.py --role controller --output NEW_JSON` | Dated local observation; optional `--lmp EXACT_BINARY` calls only `-h` |
 | Require features from selected binary | Add `--package NAME --pair-style NAME --fix-style NAME` as needed | Exact membership in help sections, not numerical support or plugin loadability in a production input |
 | Register potential file | `tools/inspect_potential.py FILE --kind nep --require-element SYMBOL --output NEW_JSON` | File size/hash, NEP header and element coverage, not suitability |
+| Check selected NEP before launch | `tools/preflight_nep_model.py --model FILE --expected-sha256 DIGEST --elements SYMBOL ...` | Reject changed identity or absent species; stdout JSON, no inference or automatic launch |
 | Register empirical potential | Same command with `--kind empirical` | Exact file identity; no speculative format parsing or mixing-rule validation |
 | Search a matching offline manual | `tools/search_manual.py --manual-dir DOC_SRC --query 'fix deposit' --limit 10` | Literal matches with source lines; no online retrieval or service |
 | Index one input and compare four literal plan fields | `tools/inspect_input.py --input FILE --plan PLAN --output NEW_JSON` | Scoped text review; variables/includes/control flow are not executed |
@@ -24,6 +25,10 @@ All bundled tools support `--help`. Resolve them from the skill root, using the 
 | Propose scientific plan | `templates/plan.json`, [deposition](deposition.md) | Explicit unknowns and agreed criteria; no scientific defaults |
 | Track run/restart evidence | `templates/attempt.json`, [records](records.md) | A record format; no submitted job or execution authorization |
 
-Every JSON report uses a new destination and refuses to overwrite existing evidence. A complete environment receipt is not a numerical test. Detailed limits, supported formats and exit codes for the local helpers are in [local-first workflow](local-first.md). The input/log tools support scoped diagnostics, not a general LAMMPS interpreter or a full preparation/scientific audit. Record unsupported constructs rather than claiming exhaustive inspection.
+Reports written to files use a new destination and refuse to overwrite existing evidence; the model preflight prints JSON only to stdout. A complete environment receipt is not a numerical test. Detailed limits, supported formats and exit codes for the local helpers are in [local-first workflow](local-first.md). The input/log tools support scoped diagnostics, not a general LAMMPS interpreter or a full preparation/scientific audit. Record unsupported constructs rather than claiming exhaustive inspection.
 
 The structure/analysis/render helpers have optional scientific-library dependencies. Read [local toolchain contracts](local-toolchain.md) before selecting configurations or interpreting results; the original six helpers remain standard-library based.
+
+## External reference deployment, now exercised
+
+CPU/GPU installations and bounded inference/MPI/open-boundary/insertion/same-engine restart checks have passed in a separate reference deployment. The model-file GPU exit defect was repaired there and regression-tested. See [validated combination and exact scope](validated-deployment.md). These are agent-guided capabilities with actual external execution evidence; they are not new bundled job submission or build adapters. The public tool installation remains portable and contains no working host configuration, binaries, patch deployment, weights or raw research outputs.

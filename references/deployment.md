@@ -21,3 +21,9 @@ The bundled environment tool invokes only bounded version queries and optionally
 Agree thresholds before testing: empirical short case; fixed-structure model inference; CPU/GPU energy, force and needed virial comparison; single/multiple rank behavior; open surface and changing atom count; restart continuity. Performance measurements are a separate permission and acceptance layer. Keep failed combinations as failed candidates, preserving logs and patch provenance.
 
 Official sources: [LAMMPS build](https://docs.lammps.org/Build.html), [packages](https://docs.lammps.org/Packages.html), [acceleration](https://docs.lammps.org/Speed_packages.html), [NVIDIA WSL guide](https://docs.nvidia.com/cuda/wsl-user-guide/index.html). Use release-matched documentation for actual builds.
+
+## Observed deployment and model-file failures
+
+See [reference deployment validation](validated-deployment.md) for the exercised CPU/GPU versions, numerical/functional checks, patched file-exit behavior and remaining gaps. Do not repeat those checks on unchanged inputs solely because they exist in a checklist; reuse valid project evidence. A new deployment or affected change needs its own scoped verification under the user's execution authorization.
+
+Before an authorized NEP launch, compare the selected file against the recorded digest and elements with `tools/preflight_nep_model.py`. A failing guard must stop the launch, not suppress the engine error. For an unpatched MatPL reader that calls `exit(1)`, a subsequent KOKKOS finalize diagnostic can be a secondary cleanup failure; inspect the earlier error and actual source. A collective file guard in the engine must handle rank-local failures consistently. Do not infer that all model-parser failures were repaired from a missing-file regression.
