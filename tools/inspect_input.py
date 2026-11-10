@@ -10,7 +10,8 @@ from common import evidence_path, print_receipt, utc_now, write_report
 CONTROL_FLOW = {'include', 'jump', 'if', 'next', 'clear', 'python', 'shell'}
 SELECTED = {'units', 'atom_style', 'boundary', 'timestep', 'pair_style', 'pair_coeff',
             'read_data', 'read_restart', 'fix', 'compute_modify', 'group', 'dump',
-            'dump_modify', 'restart', 'write_restart', 'thermo_style', 'run', 'minimize'}
+            'dump_modify', 'restart', 'write_restart', 'thermo_style', 'run', 'minimize',
+            'region', 'mass', 'velocity', 'thermo', 'unfix', 'reset_timestep'}
 
 
 def index_commands(text):
@@ -71,11 +72,42 @@ def compare_literal(commands, field, expected, ambiguous):
             'reason': 'Literal comparison only; not an input-validity or scientific-acceptance result.'}
 
 
-def inspect_input(path, plan_path=None):
+def expand_literal_includes(path, root, active=(), depth=0, budget=None):
+    if budget is None:
+        budget = {'files': 0, 'bytes': 0}
+    path = Path(path).resolve(strict=True)
+    if not path.is_relative_to(root) or path in active or depth > 8:
+        raise ValueError('Include escapes root, cycles or exceeds depth limit')
+    raw = path.read_bytes()
+    budget['files'] += 1
+    budget['bytes'] += len(raw)
+    if budget['files'] > 64 or budget['bytes'] > 16 * 1024 * 1024:
+        raise ValueError('Aggregate include budget exceeded')
+    if len(raw) > 4 * 1024 * 1024:
+        raise ValueError('Include file exceeds 4 MiB text limit')
+    commands, issues = index_commands(raw.decode('utf-8-sig'))
+    result, sources = [], [{'path': str(path), 'sha256': hashlib.sha256(raw).hexdigest()}]
+    for command in commands:
+        command['source'] = str(path)
+        if command['command'] == 'include' and not command['dynamic_tokens'] and len(command['args']) == 1:
+            # Explicit root models the intended LAMMPS working directory.
+            nested, problems, observed = expand_literal_includes(root / command['args'][0], root, (*active, path), depth + 1, budget)
+            result.extend(nested)
+            issues.extend(problems)
+            sources.extend(observed)
+        else:
+            result.append(command)
+    return result, issues, sources
+
+
+def inspect_input(path, plan_path=None, include_root=None):
     path = Path(path).expanduser().resolve(strict=True)
     raw = path.read_bytes()
     text = raw.decode('utf-8-sig')
     commands, issues = index_commands(text)
+    include_sources = []
+    if include_root is not None:
+        commands, issues, include_sources = expand_literal_includes(path, Path(include_root).resolve())
     controls = [item for item in commands if item['command'] in CONTROL_FLOW or
                 '$' in item['command'] or
                 (item['command'] == 'run' and 'every' in item['args'])]
@@ -91,6 +123,9 @@ def inspect_input(path, plan_path=None):
               'limitations': ['Single input only; include files, variables, branches and Python/shell commands are never evaluated.',
                               'No engine syntax validation, potential-interface/type mapping validation, geometry/overlap or numerical test.',
                               'No inference of command defaults, scientific confirmation, job state or execution permission.']}
+    if include_root is not None:
+        report['limitations'][0] = 'Literal includes expanded within explicit working-directory root only; variables, branches and Python/shell commands never evaluated.'
+    report['literal_include_sources'] = include_sources
     if plan_path:
         plan_path = Path(plan_path).expanduser().resolve(strict=True)
         plan_raw = plan_path.read_bytes()
@@ -103,6 +138,24 @@ def inspect_input(path, plan_path=None):
                           'note': 'Presence of a field is not approval verification.'}
         report['plan_checks'] = {field: compare_literal(commands, field, simulation.get(field), bool(issues or controls))
                                  for field in ['units', 'atom_style', 'boundary', 'timestep']}
+        contracts = plan.get('input_contract', {})
+        if not isinstance(contracts, dict):
+            raise ValueError('input_contract must be an object')
+        checks = {}
+        for field, expected in contracts.items():
+            if field not in SELECTED:
+                checks[field] = {'verdict': 'UNVERIFIED', 'reason': 'Command outside selected audit scope'}
+                continue
+            observed = [item for item in commands if item['command'] == field]
+            if issues or controls or any(item['dynamic_tokens'] for item in observed):
+                checks[field] = {'verdict': 'UNVERIFIED', 'reason': 'Unresolved parsing/control flow or dynamic command'}
+            elif not isinstance(expected, list) or not all(isinstance(row, list) and all(isinstance(token, str) for token in row) for row in expected):
+                checks[field] = {'verdict': 'UNVERIFIED', 'reason': 'Expected ordered list of literal argument lists'}
+            else:
+                actual = [item['args'] for item in observed]
+                checks[field] = {'verdict': 'MATCH' if actual == expected else 'MISMATCH',
+                                 'expected': expected, 'observed': actual}
+        report['command_contract_checks'] = checks
     return report
 
 
@@ -111,11 +164,13 @@ def main():
     parser.add_argument('--input', required=True)
     parser.add_argument('--plan', help='Optional existing plan; only four literal fields are compared')
     parser.add_argument('--output', required=True)
+    parser.add_argument('--include-root', help='Explicit intended working directory for bounded literal include text expansion')
     args = parser.parse_args()
     output = evidence_path(args.output)
-    report = inspect_input(args.input, args.plan)
+    report = inspect_input(args.input, args.plan, args.include_root)
     write_report(output, report)
     mismatches = [field for field, check in report['plan_checks'].items() if check['verdict'] == 'MISMATCH']
+    mismatches += [field for field, check in report.get('command_contract_checks', {}).items() if check['verdict'] == 'MISMATCH']
     print_receipt(output, coverage=report['coverage'], literal_mismatches=mismatches,
                   preparation_audit_complete=False)
     if mismatches:

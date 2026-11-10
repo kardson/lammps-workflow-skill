@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "id",
+    "lammps_version",
+    "interface",
+    "backend",
+    "precision",
+    "required_runtime",
+    "evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "engine_profile"
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "lammps_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "interface": {
+      "type": [
+        "object"
+      ]
+    },
+    "backend": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "precision": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "required_runtime": {
+      "type": [
+        "array"
+      ]
+    },
+    "evidence": {
+      "type": [
+        "array"
+      ]
+    }
+  }
+}

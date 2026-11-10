@@ -33,4 +33,10 @@
 
 工具需要 Python 3.10+；原有六项工具只需标准库，新增结构/分析/渲染按需使用 ASE、NumPy、SciPy、Matplotlib、OVITO/PySide6。详见 [本地工具链](references/local-toolchain.md)。流程说明见 [能力目录](references/capabilities.md)；安装了所需可选库后可用 `python -m unittest discover -s tests -v` 验证。集成演示为 `python tools/demo_local_pipeline.py --output-directory ABSOLUTE_NEW_DIRECTORY`，仅使用人工夹具。
 
-当前为 v0.4.0：本地工具链、模型启动前预检及外部参考部署工程验证说明。新增预检复用既有势文件检查器，无需额外依赖。原有 17 个入口保持兼容，现共 18 个入口。许可尚未指定，与参考 VASP 仓库保持一致；公开可见不等于已授予开源再分发许可。[第三方说明](THIRD_PARTY.md)。
+当前版本 v0.5.0，包含 27 个 CLI 入口。新增能力和兼容性说明见 [发布说明](references/release-notes.md)。许可尚未指定；公开可见不等于已授予再分发许可。[第三方说明](THIRD_PARTY.md)。
+
+## v0.5.0 新增能力
+
+新增版本化记录、引擎／势注册与兼容性检查、验证用例计划与已有输出解析；提供静态预测输入准备、输出导入及参考标签比较。阶段契约、显式时钟、事件／cohort 收支、时间块统计、重复来源绑定、非执行敏感性提案和结论证据索引也已接入本地工具。精确入口与依赖以 [能力目录](references/capabilities.md) 和机器可读注册表为准。
+
+这些工具不捆绑远程提交器；真实引擎工程证据与实际 CdTe/GaAs 科学准确性分开记录。正式晶面、终止、生长机制及采样条件未确定时，保留未确认草案，不由示例补值。

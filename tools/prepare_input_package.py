@@ -53,6 +53,44 @@ def seed(value, name):
 
 
 def prepare(config, base, output):
+    from record_io import read_record
+    bindings = {}
+    for key in ('plan_file', 'engine_profile_file', 'model_card_file'):
+        if config.get(key):
+            path = resolve_file(config[key], base)
+            before = identity(path)
+            bound = read_record(path)
+            expected_kind = {'plan_file': 'md_plan', 'engine_profile_file': 'engine_profile',
+                             'model_card_file': 'potential_model_card'}[key]
+            if bound.get('record_type') != expected_kind:
+                raise ValueError('Incorrect bound record type: ' + key)
+            bindings[key] = {**identity(path), 'id': bound.get('id'), 'schema_version': bound.get('schema_version')}
+            if any(before[field] != bindings[key][field] for field in ('bytes', 'sha256')):
+                raise ValueError('Bound record changed during preparation: ' + key)
+            if key == 'model_card_file':
+                expected_hash = bound.get('identity', {}).get('sha256')
+                if expected_hash is not None:
+                    supplied = config.get('potential', {}).get('files', [])
+                    hashes = [identity(resolve_file(value, base))['sha256'] for value in supplied]
+                    if expected_hash not in hashes:
+                        raise ValueError('Bound model identity is absent from supplied potential files')
+                mapping = bound.get('type_to_element')
+                if mapping is not None and mapping != config.get('type_order'):
+                    raise ValueError('Candidate type order differs from bound model card')
+                if bound.get('units') is not None and bound['units'] != 'metal':
+                    raise ValueError('Bound model card units differ from supported metal adapter')
+            if key == 'engine_profile_file':
+                contract = bound.get('input_contract', {})
+                for field in ('pair_style', 'pair_coeff'):
+                    if field in contract and contract[field] != config.get('potential', {}).get(field):
+                        raise ValueError('Candidate differs from declared engine input contract: ' + field)
+            if key == 'plan_file':
+                simulation = bound.get('simulation', {})
+                declarations = {'units': 'metal', 'atom_style': 'atomic', 'boundary': config.get('boundary'),
+                                'type_to_element': config.get('type_order'), 'timestep': config.get('timestep_ps')}
+                for field, value in declarations.items():
+                    if simulation.get(field) is not None and simulation[field] != value:
+                        raise ValueError('Candidate disagrees with bound plan: ' + field)
     import numpy as np
     state = readiness(config)
     if not state['ready_for_local_preparation']:
@@ -197,8 +235,28 @@ def prepare(config, base, output):
     portable['structure_file'] = 'structure.extxyz'
     portable['structure_format'] = 'extxyz'
     portable['potential']['files'] = [item['package_file'] for item in copied]
+    bound_files = []
+    for key in bindings:
+        source_path = resolve_file(config[key], base)
+        relative = 'bound-' + key.replace('_file', '') + '.json'
+        (output / relative).write_bytes(source_path.read_bytes())
+        copied_identity = identity(output / relative)
+        if any(copied_identity[field] != bindings[key][field] for field in ('bytes', 'sha256')):
+            raise ValueError('Bound record changed during preparation; partial package preserved: ' + key)
+        portable[key] = relative
+        bound_files.append(relative)
+        bindings[key]['package_file'] = relative
     json_file(output / 'configuration.json', portable)
-    selected = ['in.growth', 'structure.data', 'structure.extxyz', 'type-map.json', 'configuration.json'] + [item['package_file'] for item in copied]
+    from inspect_input import index_commands, SELECTED
+    indexed, indexing_issues = index_commands((output / 'in.growth').read_text(encoding='utf-8'))
+    literal_contract = {}
+    for command in indexed:
+        if command['command'] in SELECTED:
+            literal_contract.setdefault(command['command'], []).append(command['args'])
+    json_file(output / 'generated-command-contract.json', {
+        'input_contract': literal_contract, 'indexing_issues': indexing_issues,
+        'scope': 'Generated token snapshot for later drift checks; not independent plan approval or numerical audit.'})
+    selected = ['in.growth', 'structure.data', 'structure.extxyz', 'type-map.json', 'configuration.json', 'generated-command-contract.json'] + [item['package_file'] for item in copied] + bound_files
     report = {'prepared_utc': utc_now(), 'status': 'PREPARED_CANDIDATE_NOT_ENGINE_VALIDATED',
               'purpose': config['purpose'], 'mechanism': config['mechanism'], 'structure_source': identity(source),
               'geometry_audit': audit, 'potential': potential, 'potential_copies': copied, 'potential_header_checks': header_checks,
@@ -210,6 +268,8 @@ def prepare(config, base, output):
                               'Pair commands are explicit user-supplied interface contracts, not independently verified syntax/physics.',
                               'Incoming atoms join mobile via fix deposit; dynamic insertion, MPI, thermostat and restart behavior need engine tests.',
                               'No full scientific audit, energy/force inference, numerical or performance validation.']}
+    report['research_bindings'] = bindings
+    report['binding_status'] = 'DECLARED_RECORDS_BOUND' if all(key in bindings for key in ('plan_file', 'engine_profile_file')) else 'PARTIAL_OR_UNBOUND'
     json_file(output / 'package-manifest.json', report)
     return report
 

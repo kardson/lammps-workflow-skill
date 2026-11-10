@@ -1,0 +1,7 @@
+# Minimal execution adapter protocol
+
+Adapters expose prepare, stage, launch, status and collect; recovery uses the same persisted attempt, never inferred launch intent. A new continuation is a new linked attempt. Software preparation, execution permission, actual launch, observation reliability, termination, collection and acceptance remain separate.
+
+prepare fixes an attempt identity and input/plan/model/resource contract. stage makes verified inputs available. launch returns persisted startup identity or an explicit unknown outcome. status returns dated direct evidence without relaunch. collect records required, present and missing artifacts, preserving partial results. A missing observation does not change actual execution state to failed or authorize another launch.
+
+tools/simulated_executor.py is a file-only fixture of this protocol. It starts no process, transfers no data and does not authenticate outputs. SIMULATED states and collection names are artificial. Mutations use an atomic directory lock; locked requests fail explicitly, and an interrupted lock is never automatically deleted. State updates replace a temporary file atomically; failed writes retain the previous state and diagnostic temporary file. Sequential recovery, competing threads, unknown observations and partial collections are tested. This is not proof of remote/process orchestration or power-loss durability. No production adapter is shipped by this module.

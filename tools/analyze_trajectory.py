@@ -6,6 +6,7 @@ from common import print_receipt, utc_now
 from local_common import identity, integer, json_file, load_config, new_directory, number, require, resolve_file
 from structure_io import validate_order
 from trajectory_io import frames
+from trajectory_time import TimeMapper
 
 
 def validate(config):
@@ -80,11 +81,12 @@ def analyze(path, config, output, max_frames=None, stride=1):
     integer(stride, 'stride', 1)
     if max_frames is not None:
         integer(max_frames, 'max_frames', 1)
+    timeline = TimeMapper(config.get('time_segments'))
     output = new_directory(output)
     observation = {}
     generator = frames(path, config['max_atoms_per_frame'], observation)
     seen, selected, previous, previous_step, issues = 0, 0, None, None, []
-    columns = ['frame', 'step', 'atoms', 'selected_film_atoms', 'quantile_height_angstrom',
+    columns = ['frame', 'step', 'phase_id', 'time_ps', 'timeline_status', 'atoms', 'selected_film_atoms', 'quantile_height_angstrom',
                'mean_occupied_grid_height_angstrom', 'rms_grid_roughness_angstrom', 'occupied_grid_fraction',
                'outside_z_window', 'appeared_ids_since_previous_selected_frame', 'disappeared_ids_since_previous_selected_frame',
                'changed_species_same_id', *['count_' + symbol for symbol in order]]
@@ -95,9 +97,10 @@ def analyze(path, config, output, max_frames=None, stride=1):
             writer = csv.DictWriter(metrics_file, fieldnames=columns)
             writer.writeheader()
             profile = csv.writer(composition_file)
-            profile.writerow(['frame', 'step', 'z_lower_angstrom', 'z_upper_angstrom', 'element', 'count', 'bin_atom_fraction'])
+            profile.writerow(['frame', 'step', 'phase_id', 'time_ps', 'timeline_status', 'z_lower_angstrom', 'z_upper_angstrom', 'element', 'count', 'bin_atom_fraction'])
             for index, frame in enumerate(generator):
                 seen += 1
+                time_info = timeline.map(index, frame['step'])
                 if index % stride:
                     continue
                 selected += 1
@@ -109,9 +112,9 @@ def analyze(path, config, output, max_frames=None, stride=1):
                 changed = sum(current[key] != previous[key] for key in current.keys() & previous.keys()) if previous is not None else 0
                 if changed:
                     issues.append({'frame': index, 'reason': 'Same atom ID changed species; identity interpretation requires review.'})
-                if previous_step is not None and frame['step'] <= previous_step:
+                if timeline.segments is None and previous_step is not None and frame['step'] <= previous_step:
                     issues.append({'frame': index, 'reason': 'Step reset/repetition observed; no cumulative time inferred.'})
-                writer.writerow({'frame': index, 'step': frame['step'], **result,
+                writer.writerow({'frame': index, 'step': frame['step'], **time_info, **result,
                                  'appeared_ids_since_previous_selected_frame': appeared,
                                  'disappeared_ids_since_previous_selected_frame': disappeared,
                                  'changed_species_same_id': changed, **{'count_' + key: value for key, value in counts.items()}})
@@ -120,7 +123,7 @@ def analyze(path, config, output, max_frames=None, stride=1):
                 for j in range(len(edges) - 1):
                     for symbol in order:
                         count = int(histograms[symbol][j])
-                        profile.writerow([index, frame['step'], edges[j], edges[j + 1], symbol, count,
+                        profile.writerow([index, frame['step'], time_info['phase_id'], time_info['time_ps'], time_info['timeline_status'], edges[j], edges[j + 1], symbol, count,
                                           float(count / totals[j]) if totals[j] else ''])
                 previous, previous_step = current, frame['step']
                 if max_frames is not None and selected >= max_frames:
@@ -134,9 +137,13 @@ def analyze(path, config, output, max_frames=None, stride=1):
     status = 'FAILED' if failure else ('PARTIAL_SNAPSHOT' if not observation.get('complete_read') or observation.get('source_changed_during_read') else 'LOCAL_GEOMETRY_SUMMARY')
     if selected == 0 and not failure:
         status = 'NO_FRAMES'
+    if status == 'LOCAL_GEOMETRY_SUMMARY' and timeline.unmapped:
+        status = 'PARTIAL_TIME_MAPPING'
     report = {'analyzed_utc': utc_now(), 'status': status, 'configuration': config,
               'source': observation, 'frames_read': seen, 'frames_selected': selected,
               'stride': stride, 'maximum_selected_frames': max_frames, 'issues': issues, 'failure': failure,
+              'time_mapping': {'supplied': timeline.segments is not None, 'frames_mapped': timeline.mapped,
+                               'frames_unmapped': timeline.unmapped, 'source_policy': 'Explicit config segment sources; not authenticated'},
               'method': {'height': 'Configured quantile of selected film z minus explicit reference z.',
                          'roughness': 'RMS of per-cell maximum selected film height over occupied grid cells only.',
                          'coverage': 'Fraction of lateral grid cells occupied by at least one selected film atom; not epitaxial coverage.',

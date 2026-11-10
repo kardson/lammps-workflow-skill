@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Declared deposition stages v1; nulls remain unresolved",
+  "type": "object",
+  "required": ["schema_version", "record_type", "plan_binding", "stages"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "record_type": {"const": "deposition_stage_contract"},
+    "plan_binding": {"type": ["object", "null"], "properties": {
+      "id": {"type": ["string", "null"], "minLength": 1},
+      "file": {"type": ["string", "null"], "minLength": 1},
+      "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+    }},
+    "stages": {"type": "array", "items": {"$ref": "#/$defs/stage"}}
+  },
+  "$defs": {
+    "text": {"type": ["string", "null"], "minLength": 1},
+    "number": {"type": ["number", "null"]},
+    "step": {"type": ["integer", "null"], "minimum": 0},
+    "stage": {
+      "type": "object",
+      "required": ["id", "kind", "start_step", "end_step", "timestep_ps", "physical_time_origin_ps", "group_roles", "integrators", "temperature_definition", "open_system", "particle_count_varies", "heat_flow_definition", "insertion_event_definition", "engine_support", "stop_conditions"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["preparation", "thermalization", "deposition", "post_relaxation", "sampling"]},
+        "start_step": {"$ref": "#/$defs/step"}, "end_step": {"$ref": "#/$defs/step"},
+        "timestep_ps": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "physical_time_origin_ps": {"$ref": "#/$defs/number"},
+        "group_roles": {"type": ["object", "null"], "properties": {
+          "fixed": {"$ref": "#/$defs/text"}, "bath": {"$ref": "#/$defs/text"},
+          "mobile": {"$ref": "#/$defs/text"}, "incoming": {"$ref": "#/$defs/text"}
+        }},
+        "integrators": {"type": ["array", "null"], "items": {"type": "object", "required": ["fix_id", "atom_ids"], "properties": {
+          "fix_id": {"type": "string", "minLength": 1},
+          "atom_ids": {"type": ["array", "null"], "uniqueItems": true, "items": {"type": "integer", "minimum": 1}}
+        }}},
+        "temperature_definition": {"type": ["object", "null"], "properties": {
+          "compute_id": {"$ref": "#/$defs/text"}, "selection": {"$ref": "#/$defs/text"},
+          "streaming_velocity_treatment": {"$ref": "#/$defs/text"},
+          "dynamic_dof": {"type": ["boolean", "null"]}, "extra_dof": {"$ref": "#/$defs/number"},
+          "definition": {"$ref": "#/$defs/text"}, "alternative_dynamic_dof_evidence": {"$ref": "#/$defs/text"}
+        }},
+        "open_system": {"type": ["boolean", "null"]},
+        "particle_count_varies": {"type": ["boolean", "null"]},
+        "heat_flow_definition": {"type": ["string", "object", "null"]},
+        "insertion_event_definition": {"type": ["string", "object", "null"]},
+        "engine_support": {"type": ["object", "null"]},
+        "stop_conditions": {"type": ["array", "null"], "items": {"type": "object", "required": ["id", "quantity", "operator", "threshold", "unit", "reason", "source"], "properties": {
+          "id": {"type": "string", "minLength": 1}, "quantity": {"$ref": "#/$defs/text"},
+          "operator": {"enum": ["gt", "lt", "abs_gt", null]}, "threshold": {"$ref": "#/$defs/number"},
+          "unit": {"$ref": "#/$defs/text"}, "reason": {"$ref": "#/$defs/text"}, "source": {"$ref": "#/$defs/text"}
+        }}}
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "record_type": "engine_profile",
+  "id": null,
+  "lammps_version": null,
+  "interface": {"repository": null, "revision": null, "patches": []},
+  "backend": null,
+  "precision": null,
+  "required_runtime": [],
+  "evidence": [],
+  "scope": "Software combination only; no host binding or live readiness."
+}

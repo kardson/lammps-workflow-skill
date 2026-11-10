@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fresh atomic-beam candidate manifest",
+  "type": "object",
+  "required": [
+    "prepared_utc",
+    "purpose",
+    "mechanism",
+    "structure_source",
+    "geometry_audit",
+    "potential",
+    "potential_copies",
+    "potential_header_checks",
+    "initial_group_counts",
+    "planned_insertions",
+    "stages_steps",
+    "nominal_stage_duration_ps",
+    "package_files",
+    "file_identities",
+    "limitations",
+    "execution_authorized",
+    "simulation_run",
+    "scientific_confirmation_verified",
+    "status"
+  ],
+  "properties": {
+    "prepared_utc": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "mechanism": {
+      "type": "string"
+    },
+    "structure_source": {
+      "type": "object"
+    },
+    "geometry_audit": {
+      "type": "object"
+    },
+    "potential": {
+      "type": "object"
+    },
+    "potential_copies": {
+      "type": "array"
+    },
+    "potential_header_checks": {
+      "type": "array"
+    },
+    "initial_group_counts": {
+      "type": "object"
+    },
+    "planned_insertions": {
+      "type": "object"
+    },
+    "stages_steps": {
+      "type": "object"
+    },
+    "nominal_stage_duration_ps": {
+      "type": "object"
+    },
+    "package_files": {
+      "type": "array"
+    },
+    "file_identities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "bytes",
+          "sha256",
+          "package_file"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "package_file": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array"
+    },
+    "execution_authorized": {
+      "const": false
+    },
+    "simulation_run": {
+      "const": false
+    },
+    "scientific_confirmation_verified": {
+      "const": false
+    },
+    "status": {
+      "const": "PREPARED_CANDIDATE_NOT_ENGINE_VALIDATED"
+    },
+    "research_bindings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "path",
+          "bytes",
+          "sha256",
+          "id",
+          "schema_version",
+          "package_file"
+        ],
+        "properties": {
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "package_file": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "binding_status": {
+      "enum": [
+        "DECLARED_RECORDS_BOUND",
+        "PARTIAL_OR_UNBOUND"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

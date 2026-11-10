@@ -1,0 +1,296 @@
+{
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "status",
+    "id",
+    "kind",
+    "source",
+    "identity",
+    "elements",
+    "type_to_element",
+    "units",
+    "atom_style",
+    "interface",
+    "applicability",
+    "validation",
+    "training_in_scope"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "potential_model_card"
+    },
+    "status": {
+      "enum": [
+        "CANDIDATE",
+        "REGISTERED",
+        "REJECTED",
+        "RETIRED"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "kind": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "repository_or_url",
+        "revision",
+        "license",
+        "citation"
+      ],
+      "properties": {
+        "repository_or_url": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "revision": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "license": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "citation": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "file",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-fA-F]{64}$"
+        }
+      },
+      "additionalProperties": true
+    },
+    "elements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][a-z]?$"
+      },
+      "uniqueItems": true
+    },
+    "type_to_element": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "units": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "atom_style": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "interface": {
+      "type": "object",
+      "required": [
+        "repository",
+        "revision",
+        "lammps_version",
+        "pair_style",
+        "pair_coeff_contract",
+        "backend",
+        "precision"
+      ],
+      "properties": {
+        "repository": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "revision": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "lammps_version": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "pair_style": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "pair_coeff_contract": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "backend": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "precision": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "applicability": {
+      "type": "object",
+      "required": [
+        "fit_or_training_domain",
+        "target_system_evidence",
+        "missing_evidence",
+        "scientific_status"
+      ],
+      "properties": {
+        "fit_or_training_domain": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "target_system_evidence": {
+          "type": "array"
+        },
+        "missing_evidence": {
+          "type": "array"
+        },
+        "scientific_status": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "header_coverage",
+        "numerical_inference",
+        "mpi",
+        "dynamic_atom_count",
+        "open_boundary",
+        "restart"
+      ],
+      "properties": {
+        "header_coverage": {
+          "type": "string"
+        },
+        "numerical_inference": {
+          "type": "string"
+        },
+        "mpi": {
+          "type": "string"
+        },
+        "dynamic_atom_count": {
+          "type": "string"
+        },
+        "open_boundary": {
+          "type": "string"
+        },
+        "restart": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "training_in_scope": {
+      "const": false
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "model-card v1 draft record",
+  "description": "Structural validation only; nulls remain unresolved, not authorization or scientific acceptance."
+}

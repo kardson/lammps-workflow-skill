@@ -12,6 +12,41 @@ from local_fixtures import dump_frame, trajectory_config
 
 
 class TrajectoryAnalysisTests(unittest.TestCase):
+    def test_explicit_phase_time_survives_step_reset_without_guessing(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            source=root/'phases.dump'
+            atoms=[[1,1,0.25,0.5,1],[2,2,1.25,0.5,4]]
+            source.write_text(dump_frame(0,atoms)+dump_frame(10,atoms)+dump_frame(0,atoms)+dump_frame(5,atoms),encoding='utf-8')
+            config=trajectory_config()
+            config['time_segments']=[{'id':'first','first_frame':0,'last_frame_exclusive':2,'step_origin':0,
+                'time_origin_ps':0,'timestep_ps':0.1,'source':'Artificial phase timeline'},
+                {'id':'restart','first_frame':2,'last_frame_exclusive':4,'step_origin':0,
+                'time_origin_ps':2,'timestep_ps':0.2,'source':'Artificial explicit restart offset'}]
+            report=analyze(source,config,root/'analysis')
+            with (root/'analysis/frame-metrics.csv').open(encoding='utf-8',newline='') as stream:
+                rows=list(csv.DictReader(stream))
+            self.assertEqual([float(row['time_ps']) for row in rows],[0,1,2,3])
+            self.assertEqual(rows[2]['phase_id'],'restart')
+            self.assertEqual(report['time_mapping']['frames_mapped'],4)
+
+    def test_unmapped_frames_are_partial_and_inconsistent_time_fails(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)
+            source=root/'timeline.dump'
+            atoms=[[1,1,0.25,0.5,1]]
+            source.write_text(dump_frame(0,atoms)+dump_frame(5,atoms),encoding='utf-8')
+            config=trajectory_config()
+            config['time_segments']=[{'id':'selected','first_frame':0,'last_frame_exclusive':1,
+                'step_origin':0,'time_origin_ps':0,'timestep_ps':0.1,'source':'Artificial partial timeline'}]
+            report=analyze(source,config,root/'partial')
+            self.assertEqual(report['status'],'PARTIAL_TIME_MAPPING')
+            self.assertEqual(report['time_mapping']['frames_unmapped'],1)
+            config['time_segments'][0]['last_frame_exclusive']=2
+            source.write_text(dump_frame(5,atoms)+dump_frame(0,atoms),encoding='utf-8')
+            with self.assertRaisesRegex(ValueError,'timeline'):
+                analyze(source,config,root/'bad')
+
     def test_exact_grid_geometry_composition_and_snapshot_ids(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -1,5 +1,9 @@
 # Capability map
 
+Machine-readable task/tool metadata is in [capabilities.json](../capabilities.json), linked to the source-reviewed [CLI contracts](cli-contracts.md). It describes implemented bundled helpers, not remote execution adapters. Registry tests detect mismatched entries and duplicated contract facts.
+For version-matched manuals and interface sources, use [knowledge routing](versioned-knowledge.md).
+For runnable local examples and the distinction from external engine or research evidence, see [examples by evidence level](examples.md).
+
 All bundled tools support `--help`. Resolve them from the skill root, using the selected Python interpreter. They do not execute an MD input, run MD, launch SSH, train potentials, or create monitoring jobs.
 
 | Request | Entry point | What it establishes |
@@ -24,6 +28,23 @@ All bundled tools support `--help`. Resolve them from the skill root, using the 
 | Exercise the local pipeline on artificial fixtures | `tools/demo_local_pipeline.py --output-directory NEW` | Geometry/I/O/report/render behavior only; no MD or force inference |
 | Propose scientific plan | `templates/plan.json`, [deposition](deposition.md) | Explicit unknowns and agreed criteria; no scientific defaults |
 | Track run/restart evidence | `templates/attempt.json`, [records](records.md) | A record format; no submitted job or execution authorization |
+| Validate linked plans, audits and attempt records | `tools/validate_case.py --help` | Schema/reference checks; not scientific approval or a live host query |
+| Compare runtime/model compatibility | `tools/validate_compatibility.py --help` | Explicit registry facts and unresolved evidence; no inferred interaction physics |
+| Prepare and parse engineering validation cases | `tools/run_validation.py --help` | Case plans or existing-output checks, no engine launch |
+| Prepare static prediction inputs | `tools/prepare_static_prediction.py --help` | Explicit run-0 candidate package with identities; no model inference |
+| Import existing static energy/force outputs | `tools/import_predictions.py --help` | Geometry/atom mapping and terminal evidence checks; failed samples retained |
+| Evaluate comparable reference labels | `tools/evaluate_reference.py --help` | Energy/force/stress metrics and coverage, without fitted energy offsets or acceptance |
+| Audit declared stages and observations | `tools/inspect_stages.py --help` | Contract/link/condition checks, without equilibrium certification or process control |
+| Classify supplied deposition events/cohorts | `tools/analyze_events.py --help` | Disk-backed event accounting; no automatic trajectory event detection |
+| Summarize explicitly selected time blocks | `tools/summarize_time_series.py --help` | Conditional block intervals with diagnostics, no frame-IID assumption |
+
+Additional source-reviewed helpers are listed in the machine-readable registry;
+consult their `--help` and linked method page for exact arguments. Replica summaries
+can bind per-run scalar sources, seeds and windows; incomplete research evidence
+withholds intervals. `prepare_sweep.py --plan-only` writes bounded nonexecutable
+proposals while scientific values remain unresolved. `generate_report.py
+--evidence-config` adds a partial/declared conclusion index and native reproduction
+configuration, always with scientific acceptance unverified.
 
 Reports written to files use a new destination and refuse to overwrite existing evidence; the model preflight prints JSON only to stdout. A complete environment receipt is not a numerical test. Detailed limits, supported formats and exit codes for the local helpers are in [local-first workflow](local-first.md). The input/log tools support scoped diagnostics, not a general LAMMPS interpreter or a full preparation/scientific audit. Record unsupported constructs rather than claiming exhaustive inspection.
 

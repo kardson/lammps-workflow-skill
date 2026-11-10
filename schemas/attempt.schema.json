@@ -1,0 +1,296 @@
+{
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "status",
+    "attempt_id",
+    "plan",
+    "actual_confirmation",
+    "input_audit",
+    "execution_authorization",
+    "inputs",
+    "potential_identity",
+    "executable",
+    "interface_revision",
+    "precision",
+    "host",
+    "run_directory",
+    "command",
+    "resources",
+    "parent_attempt",
+    "parent_restart_identity",
+    "restart_audit",
+    "launch",
+    "latest_observation",
+    "termination",
+    "required_outputs",
+    "collected_outputs",
+    "missing_outputs",
+    "numerical_acceptance",
+    "scientific_acceptance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "execution_attempt"
+    },
+    "status": {
+      "enum": [
+        "NOT_LAUNCHED",
+        "PREPARED",
+        "STAGED",
+        "LAUNCH_REQUESTED",
+        "RUNNING",
+        "SUCCEEDED",
+        "FAILED",
+        "STOPPED",
+        "UNKNOWN"
+      ]
+    },
+    "attempt_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "plan": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "actual_confirmation": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "input_audit": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "execution_authorization": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "inputs": {
+      "type": "array"
+    },
+    "potential_identity": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "executable": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "interface_revision": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "precision": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "host": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "run_directory": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "command": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "resources": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "parent_attempt": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "parent_restart_identity": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "restart_audit": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "launch": {
+      "type": "object",
+      "required": [
+        "observed_utc",
+        "job_or_process_identity",
+        "evidence"
+      ],
+      "properties": {
+        "observed_utc": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "job_or_process_identity": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "latest_observation": {
+      "type": "object",
+      "required": [
+        "observed_utc",
+        "state",
+        "evidence"
+      ],
+      "properties": {
+        "observed_utc": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "state": {
+          "enum": [
+            "UNVERIFIED",
+            "UNKNOWN",
+            "RUNNING",
+            "ABSENT",
+            "SUCCEEDED",
+            "FAILED",
+            "STOPPED",
+            "PARTIAL"
+          ]
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "termination": {
+      "type": "object",
+      "required": [
+        "exit_code",
+        "evidence"
+      ],
+      "properties": {
+        "exit_code": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "required_outputs": {
+      "type": "array"
+    },
+    "collected_outputs": {
+      "type": "array"
+    },
+    "missing_outputs": {
+      "type": "array"
+    },
+    "numerical_acceptance": {
+      "type": "string"
+    },
+    "scientific_acceptance": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "attempt v1 draft record",
+  "description": "Structural validation only; nulls remain unresolved, not authorization or scientific acceptance."
+}

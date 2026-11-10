@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "potential_index"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "model_card",
+          "source",
+          "identity",
+          "elements",
+          "units",
+          "applicability",
+          "metrics",
+          "metric_context",
+          "scientific_status",
+          "training_in_scope"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "empirical",
+              "pretrained_ml"
+            ]
+          },
+          "model_card": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": "object",
+            "required": [
+              "repository",
+              "revision",
+              "license",
+              "citation"
+            ],
+            "properties": {
+              "repository": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "revision": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "license": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "citation": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "identity": {
+            "type": "object",
+            "required": [
+              "file",
+              "bytes",
+              "sha256"
+            ],
+            "properties": {
+              "file": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "bytes": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "sha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9a-fA-F]{64}$"
+              }
+            }
+          },
+          "elements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "units": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "applicability": {
+            "type": "object"
+          },
+          "metrics": {
+            "type": "object",
+            "properties": {
+              "energy_mae_ev_per_atom": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          },
+          "metric_context": {
+            "type": "object",
+            "properties": {
+              "dataset": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scenario": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "scientific_status": {
+            "enum": [
+              "UNVERIFIED",
+              "PARTIAL",
+              "ACCEPTED",
+              "REJECTED"
+            ]
+          },
+          "training_in_scope": {
+            "const": false
+          }
+        }
+      }
+    }
+  }
+}

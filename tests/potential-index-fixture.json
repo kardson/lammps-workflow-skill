@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "record_type": "potential_index",
+  "entries": [
+    {
+      "id": "artificial-empirical",
+      "kind": "empirical",
+      "model_card": null,
+      "source": {
+        "repository": null,
+        "revision": null,
+        "license": null,
+        "citation": "Artificial software fixture only"
+      },
+      "identity": {
+        "file": null,
+        "bytes": null,
+        "sha256": null
+      },
+      "elements": [
+        "Si"
+      ],
+      "units": null,
+      "applicability": {
+        "status": "UNVERIFIED",
+        "note": "No scientific claim"
+      },
+      "metrics": {},
+      "metric_context": {},
+      "scientific_status": "UNVERIFIED",
+      "training_in_scope": false
+    },
+    {
+      "id": "artificial-pretrained_ml",
+      "kind": "pretrained_ml",
+      "model_card": null,
+      "source": {
+        "repository": null,
+        "revision": null,
+        "license": null,
+        "citation": "Artificial software fixture only"
+      },
+      "identity": {
+        "file": null,
+        "bytes": null,
+        "sha256": null
+      },
+      "elements": [
+        "Si"
+      ],
+      "units": null,
+      "applicability": {
+        "status": "UNVERIFIED",
+        "note": "No scientific claim"
+      },
+      "metrics": {},
+      "metric_context": {},
+      "scientific_status": "UNVERIFIED",
+      "training_in_scope": false
+    }
+  ]
+}

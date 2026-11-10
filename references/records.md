@@ -1,5 +1,9 @@
 # Records, recovery and delivery
 
+For v1 schema validation, reference bases and non-destructive record compatibility, read [record contracts](record-contracts.md).
+For parameter origins, unresolved choices and stage-specific blockers, read [decision records](decisions.md).
+For unsubmitted variants and checkpoint preparation, read [candidate and restart contracts](candidates-restart.md).
+
 Use a private workspace with plan, literature, models, runs, analysis, review and administration areas. `tools/init_workspace.py` creates this layout without overwriting files. Existing project layouts remain valid; don't migrate raw evidence just for naming consistency.
 
 Plans and model cards distinguish proposed, confirmed and unverified fields. Reference the actual user decision in `confirmation`; leave it null in drafts. Separate scientific confirmation, installation/build permission, MD execution, performance testing, remote transfer and monitoring scopes. Do not fabricate approval records.

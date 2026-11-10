@@ -81,6 +81,9 @@ def build(config, base):
             atoms.set_cell(cell)
             observed = plane_groups(atoms.positions[:, 2], tolerance)
             construction = {'miller': miller, 'layers': config['layers'], 'termination_label': config['termination_label'],
+                            'trim_bottom_planes': bottom, 'trim_top_planes': top,
+                            'plane_tolerance_angstrom': tolerance, 'repeat': repeat,
+                            'bottom_buffer_angstrom': buffer, 'vacuum_above_angstrom': vacuum,
                             'observed_bottom_plane': dict(Counter(atoms[i].symbol for i in observed[0])),
                             'observed_top_plane': dict(Counter(atoms[i].symbol for i in observed[-1])),
                             'note': 'Unrelaxed cut/trim; no reconstruction, passivation or surface-energy selection.'}
@@ -120,6 +123,10 @@ def build(config, base):
         cell[2] = [0, 0, float(atoms.positions[:, 2].max()) + vacuum]
         atoms.set_cell(cell)
         construction = {'film_lateral_strain': (substrate.cell.lengths()[:2] / old_xy - 1).tolist(),
+                        'film_original_lateral_lengths_angstrom': old_xy.tolist(),
+                        'target_lateral_lengths_angstrom': substrate.cell.lengths()[:2].tolist(),
+                        'film_xy_shift_angstrom': shift,
+                        'bottom_buffer_angstrom': buffer, 'vacuum_above_angstrom': vacuum,
                         'lateral_match': config['lateral_match'], 'substrate_atom_count': len(substrate),
                         'film_atom_count': len(film), 'gap_angstrom': gap,
                         'note': 'Unrelaxed stacked candidate; strain/registry and chemistry require scientific review.'}
@@ -142,6 +149,23 @@ def prepare(config, base, output):
               'configuration': config, **details, 'calculator_used': False,
               'scientific_acceptance': 'UNVERIFIED', 'execution_authorized': False,
               'outputs': [identity(output / name) for name in ['structure.extxyz', 'structure.data']]}
+    import numpy as np
+    roundtrips = []
+    for name, format_name in [('structure.extxyz', 'extxyz'), ('structure.data', 'lammps-data')]:
+        restored = read_structure(output / name, format_name, config['type_order'], config['boundary'])
+        same_symbols = restored.get_chemical_symbols() == atoms.get_chemical_symbols()
+        same_cell = np.allclose(restored.cell.array, atoms.cell.array, atol=1e-8, rtol=0)
+        same_positions = np.allclose(restored.positions, atoms.positions, atol=1e-8, rtol=0)
+        same_masses = np.allclose(restored.get_masses(), atoms.get_masses(), atol=1e-8, rtol=0)
+        roundtrips.append({'file': name, 'symbols_match': same_symbols, 'cell_match': bool(same_cell),
+                           'positions_match': bool(same_positions), 'masses_match': bool(same_masses)})
+    report['serialization_audit'] = {'coordinate_tolerance_angstrom': 1e-8,
+                                    'roundtrips': roundtrips,
+                                    'scope': 'Supported format geometry/mapping preservation only; no energy or relaxation.'}
+    if not all(item[key] for item in roundtrips for key in ('symbols_match', 'cell_match', 'positions_match', 'masses_match')):
+        report['status'] = 'FAILED_SERIALIZATION_AUDIT'
+        json_file(output / 'structure-manifest.json', report)
+        raise ValueError('Export roundtrip changed geometry, mapping or masses; partial files preserved.')
     json_file(output / 'structure-manifest.json', report)
     return report
 

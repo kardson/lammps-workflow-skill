@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "parent_attempt",
+    "checkpoint",
+    "source_engine_id",
+    "target_engine_id",
+    "potential_sha256",
+    "completed_step",
+    "target_step",
+    "phase",
+    "fix_state_evidence",
+    "counter_origin",
+    "compatibility_evidence",
+    "execution_authorized"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "restart_candidate"
+    },
+    "parent_attempt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "checkpoint": {
+      "type": "object"
+    },
+    "source_engine_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_engine_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "potential_sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "completed_step": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "target_step": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "phase": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fix_state_evidence": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "counter_origin": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "compatibility_evidence": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "execution_authorized": {
+      "const": false
+    }
+  }
+}

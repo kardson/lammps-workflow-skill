@@ -1,0 +1,618 @@
+{
+  "schema_version": 1,
+  "contract_source": "cli-contracts.json",
+  "scope": "Bundled implemented CLI helpers only; agent-guided remote workflows are not executable adapters",
+  "entries": [
+    {
+      "id": "analyze_balance",
+      "entrypoint": "tools/analyze_balance.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "analysis",
+      "inputs": "CSV counters and explicit configuration",
+      "outputs": "New balance CSV/JSON with raw counters, explicit optional origins and residuals",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/deposition-metrics.md",
+      "supported_scope": "Explicit cumulative species counters in CSV and JSON configuration",
+      "contract_entrypoint": "tools/analyze_balance.py"
+    },
+    {
+      "id": "analyze_trajectory",
+      "entrypoint": "tools/analyze_trajectory.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "analysis",
+      "inputs": "Orthogonal dump, configuration, stride/frame limits",
+      "outputs": "New streamed frame/composition metrics with optional explicit phase/time mapping and analysis JSON; failed partial outputs retained",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase",
+          "numpy"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/deposition-metrics.md",
+      "supported_scope": "Orthogonal text dump with x/y/z, xu/yu/zu or xs/ys/zs; no triclinic",
+      "contract_entrypoint": "tools/analyze_trajectory.py"
+    },
+    {
+      "id": "audit_structure",
+      "entrypoint": "tools/audit_structure.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "structure_and_input",
+      "inputs": "Structure, format, mapping, boundary and minimum separation",
+      "outputs": "New geometry report and receipt",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase",
+          "numpy"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/local-toolchain.md",
+      "supported_scope": "extxyz, CIF, atomic LAMMPS data with explicit mapping/boundary",
+      "contract_entrypoint": "tools/audit_structure.py"
+    },
+    {
+      "id": "bundle_package",
+      "entrypoint": "tools/bundle_package.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "delivery",
+      "inputs": "Prepared package directory, new ZIP and receipt paths",
+      "outputs": "Verified ZIP plus new JSON receipt",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "Manifest-listed candidate files to verified ZIP",
+      "contract_entrypoint": "tools/bundle_package.py"
+    },
+    {
+      "id": "check_environment",
+      "entrypoint": "tools/check_environment.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "Selected role, optional exact binary and required features",
+      "outputs": "New JSON report plus stdout receipt",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": true,
+      "side_effects": "Writes new report; optional selected engine -h only",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "Local package metadata and optional selected engine help",
+      "contract_entrypoint": "tools/check_environment.py"
+    },
+    {
+      "id": "demo_local_pipeline",
+      "entrypoint": "tools/demo_local_pipeline.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "New output directory",
+      "outputs": "Artificial pipeline artifacts and verification JSON; partial failure receipt",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase",
+          "numpy",
+          "scipy",
+          "matplotlib",
+          "ovito",
+          "PySide6"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/local-toolchain.md",
+      "supported_scope": "Artificial integrated local software fixtures only",
+      "contract_entrypoint": "tools/demo_local_pipeline.py"
+    },
+    {
+      "id": "generate_report",
+      "entrypoint": "tools/generate_report.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "delivery",
+      "inputs": "Existing analysis directory, title, plot limit, optional conclusion evidence configuration and new output directory",
+      "outputs": "HTML, PNG, conclusion-index.json, report-configuration.json and report manifest",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "numpy",
+          "matplotlib"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes new local report artifacts; no GUI or scientific acceptance",
+      "limits_reference": "references/local-toolchain.md",
+      "supported_scope": "Existing supported trajectory analysis JSON and geometry metrics CSV",
+      "contract_entrypoint": "tools/generate_report.py"
+    },
+    {
+      "id": "init_workspace",
+      "entrypoint": "tools/init_workspace.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "records",
+      "inputs": "Absolute independent workspace; optional connect-skill",
+      "outputs": "JSON stdout listing created/preserved files",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Creates missing directories/templates; optional AGENTS route append; preserves existing records",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "Absolute independent research workspace",
+      "contract_entrypoint": "tools/init_workspace.py"
+    },
+    {
+      "id": "inspect_input",
+      "entrypoint": "tools/inspect_input.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "Input text, optional plan/literal command contract, optional explicit include root and new report path",
+      "outputs": "Scoped JSON index, four literal plan comparisons and optional ordered command contract checks",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Reads input and explicitly enabled bounded literal includes as text; writes new report; no execution",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "Literal input/command contracts with optional bounded includes; variables/control flow unresolved",
+      "contract_entrypoint": "tools/inspect_input.py"
+    },
+    {
+      "id": "inspect_potential",
+      "entrypoint": "tools/inspect_potential.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "Potential file, explicit kind and optional required elements",
+      "outputs": "New JSON report plus stdout receipt",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Reads potential; writes report; no inference",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "Raw empirical/ML identity; NEP element header only",
+      "contract_entrypoint": "tools/inspect_potential.py"
+    },
+    {
+      "id": "parse_log",
+      "entrypoint": "tools/parse_log.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "Log and new report path",
+      "outputs": "New JSON summary and receipt",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "Single-line thermo with Step/Time headers; segmented; no YAML/multiline",
+      "contract_entrypoint": "tools/parse_log.py"
+    },
+    {
+      "id": "preflight_nep_model",
+      "entrypoint": "tools/preflight_nep_model.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "Model file, expected SHA256, required elements",
+      "outputs": "JSON stdout; no files written",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Read-only; no inference",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "NEP file identity and element header only",
+      "contract_entrypoint": "tools/preflight_nep_model.py"
+    },
+    {
+      "id": "prepare_input_package",
+      "entrypoint": "tools/prepare_input_package.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "structure_and_input",
+      "inputs": "Explicit candidate configuration; output or check-only",
+      "outputs": "Candidate directory and manifest, or readiness JSON stdout/optional file",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase",
+          "numpy"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/local-toolchain.md",
+      "supported_scope": "Explicit JSON config; fresh atomic beam, metal/atomic, orthogonal p/p/f only",
+      "contract_entrypoint": "tools/prepare_input_package.py"
+    },
+    {
+      "id": "prepare_structure",
+      "entrypoint": "tools/prepare_structure.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "structure_and_input",
+      "inputs": "Explicit geometry configuration and new output directory",
+      "outputs": "Unrelaxed structures and manifest",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase",
+          "numpy"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/local-toolchain.md",
+      "supported_scope": "JSON config; zincblende bulk, bare slab, orthogonal z-normal stacked interface; extxyz/CIF/atomic data sources as documented",
+      "contract_entrypoint": "tools/prepare_structure.py"
+    },
+    {
+      "id": "prepare_sweep",
+      "entrypoint": "tools/prepare_sweep.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "Explicit bounded variants and new output directory",
+      "outputs": "Candidate manifests or nonexecutable sensitivity-plan.json with unresolved values and plan identity",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase",
+          "numpy"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/uncertainty.md",
+      "supported_scope": "Bounded explicit JSON variants using fresh atomic-beam adapter",
+      "contract_entrypoint": "tools/prepare_sweep.py"
+    },
+    {
+      "id": "render_structure",
+      "entrypoint": "tools/render_structure.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "delivery",
+      "inputs": "Structure, format, mapping, label and new output directory",
+      "outputs": "Software-rendered PNG and render JSON",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "ase",
+          "numpy",
+          "ovito",
+          "PySide6",
+          "matplotlib"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/local-toolchain.md",
+      "supported_scope": "extxyz or atomic LAMMPS data; software preview only",
+      "contract_entrypoint": "tools/render_structure.py"
+    },
+    {
+      "id": "search_manual",
+      "entrypoint": "tools/search_manual.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "inspection",
+      "inputs": "Selected manual directory, literal query and limit",
+      "outputs": "Text matches on stdout or explicit no-match message",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Reads local files; no report file",
+      "limits_reference": "references/capabilities.md",
+      "supported_scope": "Literal local manual text search",
+      "contract_entrypoint": "tools/search_manual.py"
+    },
+    {
+      "id": "summarize_replicas",
+      "entrypoint": "tools/summarize_replicas.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "analysis",
+      "inputs": "Independent-replica CSV and explicit configuration",
+      "outputs": "New replica-summary CSV/JSON with conditional interval and per-replica evidence states",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "scipy"
+        ],
+        "note": "SciPy used only when conditional Student-t intervals are enabled; declared source evidence is not physical independence certification"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "limits_reference": "references/uncertainty.md",
+      "supported_scope": "Independent replica-level scalar CSV and JSON configuration",
+      "contract_entrypoint": "tools/summarize_replicas.py"
+    },
+    {
+      "id": "validate_case",
+      "entrypoint": "tools/validate_case.py",
+      "contract_ref": "cli-contracts.json",
+      "category": "records",
+      "inputs": "JSON record, optional kind, base and link checks",
+      "outputs": "JSON stdout",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "jsonschema"
+        ],
+        "note": "Distribution transitive dependencies resolved by the selected environment; no installation performed"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Read-only local references; no inference",
+      "limits_reference": "schemas/README.md",
+      "supported_scope": "v1 plan/model/attempt/decision-log JSON or explicit unversioned candidate manifest",
+      "contract_entrypoint": "tools/validate_case.py"
+    },
+    {
+      "id": "validate_compatibility",
+      "entrypoint": "tools/validate_compatibility.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/validate_compatibility.py",
+      "category": "inspection",
+      "inputs": "v1 evidence file and explicit model hash, engine ID and scenario",
+      "outputs": "JSON stdout with per-dimension recorded evidence states",
+      "side_effects": "Read-only evidence and source existence checks",
+      "dependencies": {
+        "python": "selected interpreter",
+        "optional_imports": []
+      },
+      "supported_scope": "v1 local evidence records; exact model/engine/scenario query only",
+      "limits_reference": "references/runtime-profiles.md",
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false
+    },
+    {
+      "id": "run_validation",
+      "entrypoint": "tools/run_validation.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/run_validation.py",
+      "category": "validation",
+      "inputs": "Validated case JSON; explicit categories for planning or one existing result directory for parsing",
+      "outputs": "JSON stdout with selection or bounded terminal-receipt checks",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "jsonschema"
+        ],
+        "note": "Required for case schema validation; see requirements-validation.txt"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Read-only local case and receipt access; no execution",
+      "limits_reference": "references/validation-cases.md",
+      "supported_scope": "Selection planning, terminal/conventional thermo parsing, historical receipt-field checks; no bundled engine execution or raw force recalculation"
+    },
+    {
+      "id": "evaluate_reference",
+      "entrypoint": "tools/evaluate_reference.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/evaluate_reference.py",
+      "category": "validation",
+      "inputs": "v1 reference/prediction JSON datasets, explicit metric selection and new output directory",
+      "outputs": "evaluation.json and samples.csv; optional evaluation.png",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "matplotlib"
+        ],
+        "note": "matplotlib only required with --plot; metric/artifact evaluation uses standard library"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes new local output directory; preserves partial artifacts on plot failure; never launches engine",
+      "limits_reference": "references/reference-evaluation.md",
+      "supported_scope": "Explicit existing aligned predictions only; provenance identity and coverage, no inference or scientific acceptance"
+    },
+    {
+      "id": "import_predictions",
+      "entrypoint": "tools/import_predictions.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/import_predictions.py",
+      "category": "validation",
+      "inputs": "v1 static_prediction_import manifest with unique samples, backend identity and bound files",
+      "outputs": "predictions.json, import.json and samples.csv preserving failures",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Standard library only"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Reads identified artifacts and writes a new local output directory; never launches engine",
+      "limits_reference": "references/reference-evaluation.md",
+      "supported_scope": "Bounded existing orthogonal static metal-unit LAMMPS outputs; no engine launch or model/DFT energy alignment"
+    },
+    {
+      "id": "prepare_static_prediction",
+      "entrypoint": "tools/prepare_static_prediction.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/prepare_static_prediction.py",
+      "category": "preparation",
+      "inputs": "Explicit static_prediction_plan, configuration identity, masses, potential files/syntax and engine profile",
+      "outputs": "New candidate containing structure.data, in.static, plan/profile/model snapshots and preparation.json",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [],
+        "note": "Standard library only; potential/interface suitability reviewed separately"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes new local candidate directory and verified potential copies; never launches engine",
+      "limits_reference": "references/reference-evaluation.md",
+      "supported_scope": "Orthogonal atomic metal-unit p/f static run-0 candidates; no compatibility guarantee or execution permission"
+    },
+    {
+      "id": "inspect_stages",
+      "entrypoint": "tools/inspect_stages.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/inspect_stages.py",
+      "category": "validation",
+      "inputs": "v1 stage contract; optional paired observation/stage; optional explicit project reference root",
+      "outputs": "JSON stdout with structural/semantic and optional source-link diagnostics",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "jsonschema"
+        ],
+        "note": "Schema validation dependency from requirements-validation.txt"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Read-only local inputs and optional bound evidence; no process control, monitoring or MD",
+      "limits_reference": "references/stage-contracts.md",
+      "supported_scope": "Declared half-open phase intervals and scalar conditions, optional exact local source/scenario lookup; no automatic actions or scientific acceptance"
+    },
+    {
+      "id": "analyze_events",
+      "entrypoint": "tools/analyze_events.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/analyze_events.py",
+      "category": "analysis",
+      "inputs": "Explicit event CSV and cohort/time/definition configuration",
+      "outputs": "New events.sqlite, cohort.csv, attempts.csv and events.json with partial/failure states",
+      "dependencies": {
+        "python": "selected Python interpreter with standard-library SQLite",
+        "optional_imports": [],
+        "note": "No third-party package; bounded SQLite cache and disk state"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes new local SQLite/CSV/JSON artifacts; preserves failed partial ledger; never launches engine",
+      "limits_reference": "references/deposition-metrics.md",
+      "supported_scope": "Declared single-scope incident event/cohort bookkeeping, no atom-ID reuse; no automatic detection or physical acceptance"
+    },
+    {
+      "id": "summarize_time_series",
+      "entrypoint": "tools/summarize_time_series.py",
+      "contract_ref": "cli-contracts.json",
+      "contract_entrypoint": "tools/summarize_time_series.py",
+      "category": "analysis",
+      "inputs": "Time/metric CSV with explicit window, cadence, blocks, seed metadata and statistical bases",
+      "outputs": "New blocks.csv and time-summary.json; descriptive-only and failed partial states retained",
+      "dependencies": {
+        "python": "selected Python interpreter",
+        "optional_imports": [
+          "scipy"
+        ],
+        "note": "SciPy only needed when all declared conditional interval criteria are met"
+      },
+      "runs_md": false,
+      "evaluates_potential": false,
+      "launches_remote": false,
+      "engine_help_only": false,
+      "side_effects": "Writes new local statistical artifacts; no equilibrium selection or engine control",
+      "limits_reference": "references/uncertainty.md",
+      "supported_scope": "Explicit uniformly sampled windows and complete block means; no IID-frame SEM, inferred stationarity or scientific acceptance"
+    }
+  ]
+}

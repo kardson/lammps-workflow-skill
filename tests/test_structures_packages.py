@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
@@ -14,6 +15,124 @@ from local_fixtures import package_fixture
 
 
 class StructureAndPackageTests(unittest.TestCase):
+    def test_generated_contract_detects_changed_actual_pair(self):
+        from inspect_input import inspect_input
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            report = prepare_package(package_fixture(root), root, root / 'package')
+            contract = root / 'package/generated-command-contract.json'
+            self.assertIn(contract.name, report['package_files'])
+            script = root / 'package/in.growth'
+            before = inspect_input(script, contract)
+            self.assertEqual(before['command_contract_checks']['pair_style']['verdict'], 'MATCH')
+            script.write_text(script.read_text().replace('pair_style lj/cut', 'pair_style changed'))
+            after = inspect_input(script, contract)
+            self.assertEqual(after['command_contract_checks']['pair_style']['verdict'], 'MISMATCH')
+
+    def test_model_file_identity_positive_and_negative(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = package_fixture(root)
+            model = root / 'model.txt'
+            model.write_bytes(b'artificial model file')
+            card = {'schema_version': 1, 'record_type': 'potential_model_card',
+                    'identity': {'sha256': hashlib.sha256(model.read_bytes()).hexdigest()}}
+            (root / 'card.json').write_text(json.dumps(card))
+            config['model_card_file'] = 'card.json'
+            config['potential']['files'] = ['model.txt']
+            result = prepare_package(config, root, root / 'good')
+            self.assertIn('bound-model_card.json', result['package_files'])
+            model.write_bytes(b'changed')
+            with self.assertRaisesRegex(ValueError, 'identity is absent'):
+                prepare_package(config, root, root / 'bad')
+
+    def test_bound_snapshot_change_is_rejected(self):
+        import prepare_input_package as module
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = package_fixture(root)
+            path = root / 'plan.json'
+            path.write_text(json.dumps({'schema_version': 1, 'record_type': 'md_plan', 'id': 'p', 'simulation': {}}))
+            config['plan_file'] = path.name
+            original = module.identity
+            def modified_identity(value):
+                result = original(value)
+                if Path(value) == path:
+                    path.write_text(path.read_text() + ' ')
+                return result
+            with patch.object(module, 'identity', side_effect=modified_identity):
+                with self.assertRaisesRegex(ValueError, 'changed during preparation'):
+                    prepare_package(config, root, root / 'package')
+            self.assertFalse((root / 'package/package-manifest.json').exists())
+
+    def test_model_and_engine_contract_mismatches(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = package_fixture(root)
+            for key, record in [('model_card_file', {'schema_version': 1,
+                'record_type': 'potential_model_card', 'type_to_element': ['C', 'Si']}),
+                ('engine_profile_file', {'schema_version': 1, 'record_type': 'engine_profile',
+                'input_contract': {'pair_style': ['other-style']}})]:
+                path = root / (key + '.json')
+                path.write_text(json.dumps(record))
+                candidate = copy.deepcopy(config)
+                candidate[key] = path.name
+                with self.assertRaises(ValueError):
+                    prepare_package(candidate, root, root / key)
+                self.assertFalse((root / key).exists())
+
+    def test_bound_records_survive_package_relocation(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = package_fixture(root)
+            for key, record in [('plan_file', {'schema_version': 1, 'record_type': 'md_plan',
+                 'id': 'fixture-plan', 'simulation': {'units': 'metal'}}),
+                 ('engine_profile_file', {'schema_version': 1, 'record_type': 'engine_profile', 'id': 'fixture-engine'})]:
+                path = root / (key + '.json')
+                path.write_text(json.dumps(record))
+                config[key] = path.name
+            report = prepare_package(config, root, root / 'package')
+            self.assertEqual(report['binding_status'], 'DECLARED_RECORDS_BOUND')
+            self.assertIn('bound-plan.json', report['package_files'])
+            shutil.copytree(root / 'package', root / 'relocated')
+            portable = json.loads((root / 'relocated/configuration.json').read_text())
+            result = prepare_package(portable, root / 'relocated', root / 'regenerated')
+            self.assertEqual(result['research_bindings']['plan_file']['id'], 'fixture-plan')
+
+    def test_bound_plan_mismatch_rejected_before_package(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = package_fixture(root)
+            plan = {'schema_version': 1, 'record_type': 'md_plan', 'id': 'fixture',
+                    'simulation': {'units': 'real'}}
+            (root / 'plan.json').write_text(json.dumps(plan))
+            config['plan_file'] = 'plan.json'
+            with self.assertRaises(ValueError):
+                prepare_package(config, root, root / 'package')
+            self.assertFalse((root / 'package').exists())
+
+    def test_changed_export_is_failed_and_preserved(self):
+        import prepare_structure as module
+        original = module.read_structure
+        def altered(*args, **kwargs):
+            atoms = original(*args, **kwargs)
+            atoms.positions[0, 0] += 0.01
+            return atoms
+        config = {'operation': 'bulk_zincblende', 'purpose': 'engineering_fixture',
+                  'provenance': 'Artificial fixture', 'type_order': ['Si', 'C'],
+                  'boundary': ['p', 'p', 'p'], 'minimum_separation_angstrom': 0.2,
+                  'elements': ['Si', 'C'], 'lattice_a_angstrom': 4.4, 'repeat': [1, 1, 1]}
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            with patch.object(module, 'read_structure', side_effect=altered):
+                with self.assertRaises(ValueError):
+                    prepare_structure(config, root, root / 'failed')
+            report = json.loads((root / 'failed/structure-manifest.json').read_text())
+            self.assertEqual(report['status'], 'FAILED_SERIALIZATION_AUDIT')
+            self.assertTrue((root / 'failed/structure.data').is_file())
+
     def test_export_does_not_silently_rotate_the_research_axes(self):
         from ase import Atoms
         atoms = Atoms('Si', positions=[[0, 0, 1]], cell=[[0, 5, 0], [-5, 0, 0], [0, 0, 5]], pbc=[True, True, False])
@@ -32,6 +151,9 @@ class StructureAndPackageTests(unittest.TestCase):
             bulk = prepare_structure(base, root, root / 'bulk')
             self.assertEqual(bulk['audit']['atom_count'], 8)
             self.assertFalse(bulk['calculator_used'])
+            self.assertEqual(len(bulk['serialization_audit']['roundtrips']), 2)
+            self.assertTrue(all(item['positions_match'] and item['masses_match']
+                                for item in bulk['serialization_audit']['roundtrips']))
             source = root / 'bulk/structure.extxyz'
             slab_config = {**base, 'operation': 'slab', 'source_file': str(source), 'source_format': 'extxyz',
                            'source_boundary': ['p', 'p', 'p'], 'boundary': ['p', 'p', 'f'],

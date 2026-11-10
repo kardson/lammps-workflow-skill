@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "case_id": "local-receipt-fixture",
+  "category": "local_logic",
+  "execution_kind": "static",
+  "provenance": {"kind": "artificial_fixture", "source": "Synthetic receipt parsing fixture; no engine evidence"},
+  "preconditions": [],
+  "combination": null,
+  "resources": null,
+  "inputs": [],
+  "checks": [{"metric": "exit_code", "operator": "eq", "value": 0, "unit": "dimensionless", "source": "Fixture protocol requires zero child exit"}],
+  "expected_outputs": [{"path": "termination.json", "required": true}],
+  "parser": "termination_v1"
+}

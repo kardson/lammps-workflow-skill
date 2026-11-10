@@ -8,20 +8,32 @@ from pathlib import Path
 
 from common import print_receipt, utc_now
 from local_common import identity, integer, json_file, new_directory
+from conclusion_evidence import audit
 
 
-def generate(analysis_directory, output, title, maximum_plot_points):
+def generate(analysis_directory, output, title, maximum_plot_points, evidence_config=None):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import numpy as np
     analysis_directory = Path(analysis_directory).resolve(strict=True)
     source_report = analysis_directory / 'analysis.json'
+    source_identity = identity(source_report)
     report = json.loads(source_report.read_text(encoding='utf-8'))
     if report['status'] in {'FAILED', 'NO_FRAMES'}:
         raise ValueError('Failed/empty analysis cannot be published as a completed diagnostic report.')
     maximum = integer(maximum_plot_points, 'maximum_plot_points', 2)
     source_csv = analysis_directory / 'frame-metrics.csv'
+    csv_identity = identity(source_csv)
+    evidence_identity = None
+    if evidence_config is not None:
+        evidence_config = Path(evidence_config).resolve(strict=True)
+        evidence_identity = identity(evidence_config)
+        evidence = audit(json.loads(evidence_config.read_text(encoding='utf-8')), evidence_config.parent)
+        if identity(evidence_config) != evidence_identity:
+            raise ValueError('Conclusion configuration changed during reading.')
+    else:
+        evidence = audit({'report_class': 'diagnostic', 'claims': []}, analysis_directory)
     rows = []
     with source_csv.open(encoding='utf-8', newline='') as stream:
         # Fixed-size plot sampling without loading the full trajectory or full CSV.
@@ -39,6 +51,13 @@ def generate(analysis_directory, output, title, maximum_plot_points):
                 rows.append(last)
     if not rows:
         raise ValueError('No frame metrics to report.')
+    if identity(source_report) != source_identity or identity(source_csv) != csv_identity:
+        raise ValueError('Analysis source changed during report preparation.')
+    for claim in evidence['claims']:
+        for source in claim['sources']:
+            observed = source.get('observed_identity')
+            if observed is not None and identity(observed['path']) != observed:
+                raise ValueError('Conclusion evidence source changed during report preparation.')
     output = new_directory(output)
     x = [int(row['frame']) for row in rows]
     figure, axes = plt.subplots(2, 1, figsize=(8, 6), layout='constrained', sharex=True)
@@ -68,10 +87,21 @@ def generate(analysis_directory, output, title, maximum_plot_points):
     document += '<img alt="Configured film-height and grid-roughness diagnostics" src="data:image/png;base64,' + encoded + '">'
     document += '<h2>Explicit analysis configuration</h2><pre>' + config_text + '</pre><h2>Definitions</h2><ul>' + method + '</ul><h2>Limits</h2><ul>' + limits + '</ul>'
     document += '<p>Issues: ' + html.escape(json.dumps(report['issues'], ensure_ascii=False)) + '</p></html>'
+    document = document.removesuffix('</html>')
+    document += '<h2>Conclusion evidence index</h2><p>Report class: ' + html.escape(evidence['report_class']) + '; chain status: ' + evidence['status'] + '. Scientific acceptance UNVERIFIED.</p>'
+    document += '<pre>' + html.escape(json.dumps(evidence, ensure_ascii=False, indent=2)) + '</pre></html>'
     (output / 'report.html').write_text(document, encoding='utf-8')
-    receipt = {'generated_utc': utc_now(), 'title': title, 'analysis_source': identity(source_report),
-               'metrics_source': identity(source_csv), 'plotted_points': len(rows), 'plot_stride': stride,
-               'outputs': [identity(output / name) for name in ['report.html', 'geometry-metrics.png']],
+    json_file(output / 'conclusion-index.json', evidence)
+    reproduction = {'tool': identity(Path(__file__)), 'analysis_directory': str(analysis_directory),
+                    'evidence_auditor': identity(Path(__file__).with_name('conclusion_evidence.py')),
+                    'title': title, 'maximum_plot_points': maximum, 'evidence_configuration': evidence_identity,
+                    'sources': [source_identity, csv_identity], 'plot_x': 'stored_frame_index',
+                    'plot_columns': [item[0] for item in definitions]}
+    json_file(output / 'report-configuration.json', reproduction)
+    receipt = {'generated_utc': utc_now(), 'title': title, 'analysis_source': source_identity,
+               'metrics_source': csv_identity, 'plotted_points': len(rows), 'plot_stride': stride,
+               'report_class': evidence['report_class'], 'conclusion_chain_status': evidence['status'],
+               'outputs': [identity(output / name) for name in ['report.html', 'geometry-metrics.png', 'conclusion-index.json', 'report-configuration.json']],
                'scientific_acceptance': 'UNVERIFIED', 'simulation_run': False}
     json_file(output / 'report-manifest.json', receipt)
     return receipt
@@ -83,8 +113,9 @@ def main():
     parser.add_argument('--output-directory', required=True)
     parser.add_argument('--title', required=True)
     parser.add_argument('--maximum-plot-points', type=int, required=True)
+    parser.add_argument('--evidence-config')
     args = parser.parse_args()
-    result = generate(args.analysis_directory, args.output_directory, args.title, args.maximum_plot_points)
+    result = generate(args.analysis_directory, args.output_directory, args.title, args.maximum_plot_points, args.evidence_config)
     print_receipt(args.output_directory, plotted_points=result['plotted_points'], scientific_acceptance='UNVERIFIED')
 
 

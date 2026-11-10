@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "record_type": "restart_candidate",
+  "parent_attempt": null,
+  "checkpoint": {"file": null, "sha256": null},
+  "source_engine_id": null,
+  "target_engine_id": null,
+  "potential_sha256": null,
+  "completed_step": null,
+  "target_step": null,
+  "phase": null,
+  "fix_state_evidence": null,
+  "counter_origin": null,
+  "compatibility_evidence": null,
+  "execution_authorized": false
+}

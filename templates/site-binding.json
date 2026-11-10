@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "record_type": "site_binding",
+  "site_id": null,
+  "connection_reference": null,
+  "engine_bindings": [],
+  "resource_observation": null,
+  "scope": "Fill only in private workspace; no credentials in records or Git."
+}

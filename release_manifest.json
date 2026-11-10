@@ -1,29 +1,38 @@
 {
   "skill": "lammps-md-workflow",
-  "version": "0.4.0",
-  "stage": "local-toolchain-model-preflight-and-reference-runtime-validation",
+  "version": "0.5.0",
+  "stage": "evidence-contracts-validation-reference-analysis-and-reporting",
   "repository": "https://github.com/kardson/lammps-workflow-skill",
   "skill_root": ".",
   "python_minimum": "3.10",
   "implemented_tools": [
-    "init_workspace.py",
-    "check_environment.py",
-    "inspect_potential.py",
-    "search_manual.py",
-    "inspect_input.py",
-    "parse_log.py",
-    "prepare_structure.py",
-    "audit_structure.py",
-    "prepare_input_package.py",
-    "analyze_trajectory.py",
     "analyze_balance.py",
-    "summarize_replicas.py",
-    "render_structure.py",
-    "generate_report.py",
+    "analyze_trajectory.py",
+    "audit_structure.py",
     "bundle_package.py",
-    "prepare_sweep.py",
+    "check_environment.py",
     "demo_local_pipeline.py",
-    "preflight_nep_model.py"
+    "generate_report.py",
+    "init_workspace.py",
+    "inspect_input.py",
+    "inspect_potential.py",
+    "parse_log.py",
+    "preflight_nep_model.py",
+    "prepare_input_package.py",
+    "prepare_structure.py",
+    "prepare_sweep.py",
+    "render_structure.py",
+    "search_manual.py",
+    "summarize_replicas.py",
+    "validate_case.py",
+    "validate_compatibility.py",
+    "run_validation.py",
+    "evaluate_reference.py",
+    "import_predictions.py",
+    "prepare_static_prediction.py",
+    "inspect_stages.py",
+    "analyze_events.py",
+    "summarize_time_series.py"
   ],
   "optional_dependencies": {
     "structure": [
@@ -49,10 +58,23 @@
       "ovito",
       "PySide6-Essentials",
       "matplotlib"
+    ],
+    "record_validation": [
+      "jsonschema>=4.18,<5"
+    ],
+    "time_block_intervals": [
+      "scipy"
+    ],
+    "reference_plots": [
+      "numpy",
+      "matplotlib"
     ]
   },
-  "validation_scope": "Bundled local tooling is verified with artificial fixtures; new NEP preflight checks file identity/header only. Separate reference deployment has completed bounded CPU/GPU NEP89 inference, MPI, open-boundary insertion, same-engine restart and GPU file-guard repair regressions. No general production, scientific suitability, long-run, multi-GPU or performance acceptance.",
+  "validation_scope": "179 local artificial-fixture tests: 178 passed, 1 Windows symlink-permission skip; 33 isolated invocations; current integrated local demonstration passed. External engine evidence remains bounded engineering only. No scientific applicability, production, long-run, multi-GPU or performance acceptance.",
   "license": "UNSPECIFIED",
   "reference_deployment_evidence": "references/validated-deployment.md",
-  "runtime_artifacts_bundled": false
+  "runtime_artifacts_bundled": false,
+  "cli_contracts": "cli-contracts.json",
+  "capability_registry": "capabilities.json",
+  "release_notes": "references/release-notes.md"
 }

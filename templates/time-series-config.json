@@ -1,0 +1,22 @@
+{
+  "time_column": null,
+  "metric_column": null,
+  "unit": null,
+  "run_id": null,
+  "source_class": null,
+  "seed_basis": null,
+  "window_start_ps": null,
+  "window_end_ps": null,
+  "window_basis": null,
+  "sample_interval_ps": null,
+  "time_tolerance_ps": null,
+  "block_duration_ps": null,
+  "maximum_blocks": null,
+  "minimum_blocks_for_interval": null,
+  "confidence": null,
+  "stationarity_basis": null,
+  "correlation_basis": null,
+  "max_absolute_block_lag1": null,
+  "seeds": {},
+  "notes": "Unconfirmed draft; choose scientific window and block criteria explicitly. No execution authorization."
+}

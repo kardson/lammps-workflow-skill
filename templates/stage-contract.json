@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "record_type": "deposition_stage_contract",
+  "status": "DRAFT",
+  "plan_binding": null,
+  "candidate_stages_only": true,
+  "stages": [
+    {
+      "id": "preparation",
+      "kind": "preparation",
+      "start_step": null,
+      "end_step": null,
+      "timestep_ps": null,
+      "physical_time_origin_ps": null,
+      "group_roles": {
+        "fixed": null,
+        "bath": null,
+        "mobile": null,
+        "incoming": null
+      },
+      "integrators": null,
+      "open_system": null,
+      "particle_count_varies": null,
+      "temperature_definition": null,
+      "heat_flow_definition": null,
+      "insertion_event_definition": null,
+      "engine_support": null,
+      "stop_conditions": null
+    },
+    {
+      "id": "thermalization",
+      "kind": "thermalization",
+      "start_step": null,
+      "end_step": null,
+      "timestep_ps": null,
+      "physical_time_origin_ps": null,
+      "group_roles": {
+        "fixed": null,
+        "bath": null,
+        "mobile": null,
+        "incoming": null
+      },
+      "integrators": null,
+      "open_system": null,
+      "particle_count_varies": null,
+      "temperature_definition": null,
+      "heat_flow_definition": null,
+      "insertion_event_definition": null,
+      "engine_support": null,
+      "stop_conditions": null
+    },
+    {
+      "id": "deposition",
+      "kind": "deposition",
+      "start_step": null,
+      "end_step": null,
+      "timestep_ps": null,
+      "physical_time_origin_ps": null,
+      "group_roles": {
+        "fixed": null,
+        "bath": null,
+        "mobile": null,
+        "incoming": null
+      },
+      "integrators": null,
+      "open_system": null,
+      "particle_count_varies": null,
+      "temperature_definition": null,
+      "heat_flow_definition": null,
+      "insertion_event_definition": null,
+      "engine_support": null,
+      "stop_conditions": null
+    },
+    {
+      "id": "post_relaxation",
+      "kind": "post_relaxation",
+      "start_step": null,
+      "end_step": null,
+      "timestep_ps": null,
+      "physical_time_origin_ps": null,
+      "group_roles": {
+        "fixed": null,
+        "bath": null,
+        "mobile": null,
+        "incoming": null
+      },
+      "integrators": null,
+      "open_system": null,
+      "particle_count_varies": null,
+      "temperature_definition": null,
+      "heat_flow_definition": null,
+      "insertion_event_definition": null,
+      "engine_support": null,
+      "stop_conditions": null
+    },
+    {
+      "id": "sampling",
+      "kind": "sampling",
+      "start_step": null,
+      "end_step": null,
+      "timestep_ps": null,
+      "physical_time_origin_ps": null,
+      "group_roles": {
+        "fixed": null,
+        "bath": null,
+        "mobile": null,
+        "incoming": null
+      },
+      "integrators": null,
+      "open_system": null,
+      "particle_count_varies": null,
+      "temperature_definition": null,
+      "heat_flow_definition": null,
+      "insertion_event_definition": null,
+      "engine_support": null,
+      "stop_conditions": null
+    }
+  ],
+  "notes": "Proposed workflow roles only; nulls remain unresolved. No execution authorization or automatic equilibrium criterion."
+}

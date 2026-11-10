@@ -1,0 +1,406 @@
+{
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "status",
+    "id",
+    "question",
+    "materials",
+    "deposition",
+    "model",
+    "simulation",
+    "acceptance",
+    "outputs",
+    "confirmation",
+    "execution_authorization",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "md_plan"
+    },
+    "status": {
+      "enum": [
+        "DRAFT",
+        "PROPOSED",
+        "CONFIRMED",
+        "SUPERSEDED",
+        "REJECTED"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "question": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "materials": {
+      "type": "object",
+      "required": [
+        "substrate",
+        "growing_material",
+        "orientation",
+        "termination",
+        "source_structures"
+      ],
+      "properties": {
+        "substrate": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "growing_material": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "orientation": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "termination": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "source_structures": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "deposition": {
+      "type": "object",
+      "required": [
+        "mechanism",
+        "incident_species",
+        "flux",
+        "flux_units",
+        "arrival_energy_or_velocity",
+        "injection_region",
+        "seeds"
+      ],
+      "properties": {
+        "mechanism": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "incident_species": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "flux": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "flux_units": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "arrival_energy_or_velocity": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "injection_region": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "seeds": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "model": {
+      "type": "object",
+      "required": [
+        "kind",
+        "model_card",
+        "interface",
+        "suitability_evidence"
+      ],
+      "properties": {
+        "kind": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "model_card": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "interface": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "suitability_evidence": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "simulation": {
+      "type": "object",
+      "required": [
+        "units",
+        "atom_style",
+        "type_to_element",
+        "boundary",
+        "cell",
+        "fixed_region",
+        "bath_region",
+        "mobile_region",
+        "temperature",
+        "timestep",
+        "stages",
+        "physical_duration"
+      ],
+      "properties": {
+        "units": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "atom_style": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "type_to_element": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "boundary": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "enum": [
+              "p",
+              "f",
+              "s",
+              "m"
+            ]
+          }
+        },
+        "cell": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "fixed_region": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "bath_region": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "mobile_region": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "temperature": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "timestep": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "stages": {
+          "type": "array"
+        },
+        "physical_duration": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "acceptance": {
+      "type": "object",
+      "required": [
+        "numerical_validation",
+        "scientific_observables",
+        "uncertainty_plan",
+        "stop_conditions"
+      ],
+      "properties": {
+        "numerical_validation": {
+          "type": "array"
+        },
+        "scientific_observables": {
+          "type": "array"
+        },
+        "uncertainty_plan": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "stop_conditions": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "outputs": {
+      "type": "object",
+      "required": [
+        "required_files",
+        "cadence",
+        "restart_contract"
+      ],
+      "properties": {
+        "required_files": {
+          "type": "array"
+        },
+        "cadence": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "restart_contract": {
+          "type": [
+            "string",
+            "object",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "confirmation": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "execution_authorization": {
+      "type": [
+        "string",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    }
+  },
+  "additionalProperties": true,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "plan v1 draft record",
+  "description": "Structural validation only; nulls remain unresolved, not authorization or scientific acceptance."
+}

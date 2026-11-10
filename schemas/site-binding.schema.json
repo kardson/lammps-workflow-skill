@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "record_type",
+    "site_id",
+    "connection_reference",
+    "engine_bindings",
+    "resource_observation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "site_binding"
+    },
+    "site_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "connection_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "engine_bindings": {
+      "type": [
+        "array"
+      ],
+      "items": {
+        "type": "object",
+        "required": [
+          "engine_id",
+          "executable"
+        ],
+        "properties": {
+          "engine_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executable": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "resource_observation": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

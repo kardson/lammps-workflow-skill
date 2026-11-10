@@ -1,0 +1,933 @@
+{
+  "schema_version": 1,
+  "scope": "Source-reviewed CLI contracts; inspect per-entry scope and limitations",
+  "entries": [
+    {
+      "entrypoint": "tools/analyze_balance.py",
+      "arguments": [
+        {
+          "names": [
+            "--csv"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "CSV counters and explicit configuration",
+      "outputs": "New balance CSV/JSON with raw counters, explicit optional origins and residuals",
+      "exit_codes": "0 supplied balance matches; 1 mismatch or input/I/O error; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/analyze_trajectory.py",
+      "arguments": [
+        {
+          "names": [
+            "--trajectory"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--max-frames"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--stride"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Orthogonal dump, configuration, stride/frame limits",
+      "outputs": "New streamed frame/composition metrics with optional explicit phase/time mapping and analysis JSON; failed partial outputs retained",
+      "exit_codes": "0 supported analysis; 1 no frames, failure or input/I/O error; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/audit_structure.py",
+      "arguments": [
+        {
+          "names": [
+            "--structure"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--format"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--type-order"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--boundary"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--minimum-separation"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Structure, format, mapping, boundary and minimum separation",
+      "outputs": "New geometry report and receipt",
+      "exit_codes": "0 scoped geometry passes; 1 geometry/input/I/O failure; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/bundle_package.py",
+      "arguments": [
+        {
+          "names": [
+            "--package-directory"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--archive"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--receipt"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Prepared package directory, new ZIP and receipt paths",
+      "outputs": "Verified ZIP plus new JSON receipt",
+      "exit_codes": "0 verified archive; 1 input/I/O/integrity error; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/check_environment.py",
+      "arguments": [
+        {
+          "names": [
+            "--role"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--lmp"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--package"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--pair-style"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--fix-style"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--output"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Selected role, optional exact binary and required features",
+      "outputs": "New JSON report plus stdout receipt",
+      "exit_codes": "0 scoped observation; 1 required engine/features unverified; 2 usage error; unhandled I/O may exit 1",
+      "side_effects": "Writes new report; optional selected engine -h only",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/demo_local_pipeline.py",
+      "arguments": [
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "New output directory",
+      "outputs": "Artificial pipeline artifacts and verification JSON; partial failure receipt",
+      "exit_codes": "0 local software checks; 1 failure; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/generate_report.py",
+      "arguments": [
+        {
+          "names": [
+            "--analysis-directory"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--title"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--maximum-plot-points"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--evidence-config"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Existing analysis directory, title, plot limit, optional conclusion evidence configuration and new output directory",
+      "outputs": "HTML, PNG, conclusion-index.json, report-configuration.json and report manifest",
+      "exit_codes": "0 diagnostic report created; 1 input/render/I/O error; 2 usage error",
+      "side_effects": "Writes new local report artifacts; no GUI or scientific acceptance",
+      "verification_scope": "Source review; not an exhaustive failure behavior test"
+    },
+    {
+      "entrypoint": "tools/init_workspace.py",
+      "arguments": [
+        {
+          "names": [
+            "--workspace"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--connect-skill"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Absolute independent workspace; optional connect-skill",
+      "outputs": "JSON stdout listing created/preserved files",
+      "exit_codes": "0 initialization completed; 1 invalid path/I/O error; 2 usage error",
+      "side_effects": "Creates missing directories/templates; optional AGENTS route append; preserves existing records",
+      "verification_scope": "Source review; not an exhaustive failure behavior test"
+    },
+    {
+      "entrypoint": "tools/inspect_input.py",
+      "arguments": [
+        {
+          "names": [
+            "--input"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--plan"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--output"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--include-root"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Input text, optional plan/literal command contract, optional explicit include root and new report path",
+      "outputs": "Scoped JSON index, four literal plan comparisons and optional ordered command contract checks",
+      "exit_codes": "0 report without literal mismatch, possibly partial; 1 mismatch/input/I/O failure; 2 usage error",
+      "side_effects": "Reads input and explicitly enabled bounded literal includes as text; writes new report; no execution",
+      "verification_scope": "Source review; not an exhaustive failure behavior test"
+    },
+    {
+      "entrypoint": "tools/inspect_potential.py",
+      "arguments": [
+        {
+          "names": [
+            "file"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--kind"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--require-element"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--output"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Potential file, explicit kind and optional required elements",
+      "outputs": "New JSON report plus stdout receipt",
+      "exit_codes": "0 observed coverage; 1 missing coverage or unhandled input/I/O error; 2 usage error",
+      "side_effects": "Reads potential; writes report; no inference",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/parse_log.py",
+      "arguments": [
+        {
+          "names": [
+            "--log"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Log and new report path",
+      "outputs": "New JSON summary and receipt",
+      "exit_codes": "0 scoped summary; 1 errors/nonfinite/malformed/changing source; 2 unsupported/no thermo or usage error; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/preflight_nep_model.py",
+      "arguments": [
+        {
+          "names": [
+            "--model"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--expected-sha256"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--elements"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Model file, expected SHA256, required elements",
+      "outputs": "JSON stdout; no files written",
+      "exit_codes": "0 header/identity pass; 2 rejection or usage error",
+      "side_effects": "Read-only; no inference",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/prepare_input_package.py",
+      "arguments": [
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--check-only"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--readiness-report"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Explicit candidate configuration; output or check-only",
+      "outputs": "Candidate directory and manifest, or readiness JSON stdout/optional file",
+      "exit_codes": "0 prepared or check ready; 2 check not ready or usage; 1 input/I/O error; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/prepare_structure.py",
+      "arguments": [
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Explicit geometry configuration and new output directory",
+      "outputs": "Unrelaxed structures and manifest",
+      "exit_codes": "0 candidate prepared; 1 input/geometry/I/O error; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/prepare_sweep.py",
+      "arguments": [
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--maximum-candidates"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--plan-only"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Explicit bounded variants and new output directory",
+      "outputs": "Candidate manifests or nonexecutable sensitivity-plan.json with unresolved values and plan identity",
+      "exit_codes": "0 candidates prepared; 1 preparation/input/I/O failure; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/render_structure.py",
+      "arguments": [
+        {
+          "names": [
+            "--structure"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--format"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--type-order"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--label"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Structure, format, mapping, label and new output directory",
+      "outputs": "Software-rendered PNG and render JSON",
+      "exit_codes": "0 preview written; 1 input/render/I/O error; argparse usage errors exit 2",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/search_manual.py",
+      "arguments": [
+        {
+          "names": [
+            "--manual-dir"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--query"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--limit"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Selected manual directory, literal query and limit",
+      "outputs": "Text matches on stdout or explicit no-match message",
+      "exit_codes": "0 search completed including no match; 2 usage error; unhandled I/O may exit 1",
+      "side_effects": "Reads local files; no report file",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/summarize_replicas.py",
+      "arguments": [
+        {
+          "names": [
+            "--csv"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Independent-replica CSV and explicit configuration",
+      "outputs": "New replica-summary CSV/JSON with conditional interval and per-replica evidence states",
+      "exit_codes": "0 completed conditional/descriptive summary, not acceptance; 1 unresolved evidence; 2 input/dependency/I/O/usage error",
+      "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/validate_case.py",
+      "arguments": [
+        {
+          "names": [
+            "--record"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--kind"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--check-links"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--reference-root"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD or model inference; check_environment may call selected binary -h",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "JSON record, optional kind, base and link checks",
+      "outputs": "JSON stdout",
+      "exit_codes": "0 structurally valid, inspect PARTIAL links; 1 invalid/inconsistent; 2 input/dependency/usage error",
+      "side_effects": "Read-only local references; no inference",
+      "verification_scope": "Source review; behavior coverage tracked separately in tests"
+    },
+    {
+      "entrypoint": "tools/validate_compatibility.py",
+      "arguments": [
+        {
+          "names": [
+            "--evidence"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--model-sha256"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--engine-id"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--scenario"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No MD, inference or remote operation",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "v1 evidence file and explicit model hash, engine ID and scenario",
+      "outputs": "JSON stdout with per-dimension recorded evidence states",
+      "exit_codes": "0 query complete (may be unverified); 1 failed/conflicting recorded validation; 2 input/usage error",
+      "side_effects": "Read-only evidence and source existence checks",
+      "verification_scope": "Source review; CLI behavior tests pending"
+    },
+    {
+      "entrypoint": "tools/run_validation.py",
+      "arguments": [
+        {
+          "names": [
+            "--operation"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--case"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--category"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--result-directory"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "No process launch, engine inference or MD",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Validated case JSON; explicit categories for planning or one existing result directory for parsing",
+      "outputs": "JSON stdout with selection or bounded terminal-receipt checks",
+      "exit_codes": "0 plan produced or parsed checks passed; 1 partial/failed/unverified parse; 2 input/dependency/usage error",
+      "side_effects": "Read-only local case and receipt access; no execution",
+      "verification_scope": "Artificial fixture behavior; engine-specific numerical parsers and execution adapter pending"
+    },
+    {
+      "entrypoint": "tools/evaluate_reference.py",
+      "arguments": [
+        {
+          "names": [
+            "--references"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--predictions"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--metric"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--plot"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "Local existing-artifact comparison; no inference or MD",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "v1 reference/prediction JSON datasets, explicit metric selection and new output directory",
+      "outputs": "evaluation.json and samples.csv; optional evaluation.png",
+      "exit_codes": "0 complete metrics reported, not scientifically accepted; 1 partial metrics; 2 input/dependency/I/O/usage error",
+      "side_effects": "Writes new local output directory; preserves partial artifacts on plot failure; never launches engine",
+      "verification_scope": "Artificial artifact/CLI/coverage/provenance tests; no actual model precision evaluation"
+    },
+    {
+      "entrypoint": "tools/import_predictions.py",
+      "arguments": [
+        {
+          "names": [
+            "--manifest"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "Local existing static output import; no inference or MD",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "v1 static_prediction_import manifest with unique samples, backend identity and bound files",
+      "outputs": "predictions.json, import.json and samples.csv preserving failures",
+      "exit_codes": "0 every sample imported; 1 partial import; 2 input/I/O/usage error",
+      "side_effects": "Reads identified artifacts and writes a new local output directory; never launches engine",
+      "verification_scope": "Synthetic batch/CLI/failure coverage; historical static import checked separately"
+    },
+    {
+      "entrypoint": "tools/prepare_static_prediction.py",
+      "arguments": [
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "Local static candidate preparation; no inference or MD",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Explicit static_prediction_plan, configuration identity, masses, potential files/syntax and engine profile",
+      "outputs": "New candidate containing structure.data, in.static, plan/profile/model snapshots and preparation.json",
+      "exit_codes": "0 candidate prepared (may retain unresolved engine identity); 2 input/I/O/usage error",
+      "side_effects": "Writes new local candidate directory and verified potential copies; never launches engine",
+      "verification_scope": "Artificial atomic serialization/model-copy/invalid-geometry fixtures; no scientific acceptance"
+    },
+    {
+      "entrypoint": "tools/inspect_stages.py",
+      "arguments": [
+        {
+          "names": [
+            "--contract"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--observation"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--stage"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--reference-root"
+          ],
+          "required": false
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "Local declaration/source/supplied-observation inspection only",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "v1 stage contract; optional paired observation/stage; optional explicit project reference root",
+      "outputs": "JSON stdout with structural/semantic and optional source-link diagnostics",
+      "exit_codes": "0 complete declarations or no declared condition triggered with requested links matching; 1 invalid/partial/unknown/triggered or source-link gap; 2 input/dependency/usage error",
+      "side_effects": "Read-only local inputs and optional bound evidence; no process control, monitoring or MD",
+      "verification_scope": "Artificial structure/condition/source/CLI tests; no runtime stage physics validation"
+    },
+    {
+      "entrypoint": "tools/analyze_events.py",
+      "arguments": [
+        {
+          "names": [
+            "--csv"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "Local declared incident-event ledger analysis; no MD or event inference",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Explicit event CSV and cohort/time/definition configuration",
+      "outputs": "New events.sqlite, cohort.csv, attempts.csv and events.json with partial/failure states",
+      "exit_codes": "0 complete declared ledger summary; 1 partial/failed ledger; 2 input/SQLite/I/O/usage error",
+      "side_effects": "Writes new local SQLite/CSV/JSON artifacts; preserves failed partial ledger; never launches engine",
+      "verification_scope": "Synthetic lifecycle, failure, duplicate-ID and CLI tests only; physical event definitions supplied by caller"
+    },
+    {
+      "entrypoint": "tools/summarize_time_series.py",
+      "arguments": [
+        {
+          "names": [
+            "--csv"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--config"
+          ],
+          "required": true
+        },
+        {
+          "names": [
+            "--output-directory"
+          ],
+          "required": true
+        }
+      ],
+      "argument_source": "AST static inspection",
+      "execution": "Local time-window/block statistics only; no MD",
+      "contract_status": "SOURCE_REVIEWED",
+      "inputs": "Time/metric CSV with explicit window, cadence, blocks, seed metadata and statistical bases",
+      "outputs": "New blocks.csv and time-summary.json; descriptive-only and failed partial states retained",
+      "exit_codes": "0 conditional block interval reported; 1 descriptive-only or failed analysis; 2 initial input/I/O/usage error",
+      "side_effects": "Writes new local statistical artifacts; no equilibrium selection or engine control",
+      "verification_scope": "Artificial cadence/gap/correlation/block-SEM/CLI fixtures; not physical independence validation"
+    }
+  ]
+}

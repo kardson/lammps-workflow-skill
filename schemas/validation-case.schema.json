@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bounded validation case v1",
+  "type": "object",
+  "required": ["schema_version", "case_id", "category", "execution_kind", "provenance", "preconditions", "combination", "resources", "inputs", "checks", "expected_outputs", "parser"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "case_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+    "category": {"enum": ["installation", "inference", "md", "performance", "scientific", "local_logic"]},
+    "execution_kind": {"enum": ["static", "finite_fixture", "engine"]},
+    "provenance": {"type": "object", "required": ["kind", "source"], "properties": {"kind": {"enum": ["artificial_fixture", "official_example", "historical_engine", "research"]}, "source": {"type": "string", "minLength": 1}}},
+    "preconditions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "combination": {"type": ["object", "null"], "description": "Exact model hash, engine identity and precision when applicable; null means unbound."},
+    "resources": {"type": ["object", "null"], "description": "Explicit actual-run bounds; null cannot authorize execution."},
+    "inputs": {"type": "array", "items": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}},
+    "checks": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["metric", "operator", "value", "unit", "source"], "properties": {"metric": {"type": "string", "minLength": 1}, "operator": {"enum": ["eq", "le", "ge", "finite"]}, "value": {"type": ["number", "string", "boolean", "null"]}, "unit": {"type": "string", "minLength": 1}, "source": {"type": "string", "minLength": 1}}}},
+    "expected_outputs": {"type": "array", "items": {"type": "object", "required": ["path", "required"], "properties": {"path": {"type": "string", "minLength": 1}, "required": {"type": "boolean"}}}},
+    "parser": {"type": "string", "minLength": 1},
+    "historical_source": {"type": "object", "required": ["path", "pointer", "observed_date"], "properties": {"path": {"type": "string", "minLength": 1}, "pointer": {"type": "string"}, "observed_date": {"type": "string", "minLength": 1}}, "additionalProperties": false}
+  },
+  "additionalProperties": false
+}

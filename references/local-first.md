@@ -28,6 +28,10 @@ Reads a single UTF-8 input as text. Supports ordinary quoted tokens, comments an
 
 `MATCH` means the selected literal field matches a draft/plan field. It is not scientific confirmation, a full preparation audit, engine validation, potential mapping or execution permission. Type-to-element mapping, structure and overlaps, interface syntax and all scientific choices still require their own review. Exit 1 indicates a literal mismatch; exit 0 only means a report was written without that mismatch.
 
+Optional `--include-root DIRECTORY` expands literal includes as text relative to the explicitly intended LAMMPS working directory. It rejects cycles, paths outside that root, depth above eight, more than 64 file visits, single files above 4 MiB or aggregate text above 16 MiB. No variables or commands execute. Source paths and hashes are retained. Dynamic includes remain unresolved.
+
+A plan may provide `input_contract` mapping selected command names to ordered lists of literal argument lists. The index compares actual pair, group, region, mass, fix, run/output and other selected declarations, preserving order and repetitions. Unresolved parsing/control flow or dynamic tokens make affected checks UNVERIFIED. This is a token contract, not an interpreter or proof that a group/thermostat implements the intended physics. Exit 1 also covers these explicit contract mismatches.
+
 ### Segmented log summary
 
 ```text
