@@ -1,6 +1,6 @@
 {
   "skill": "lammps-md-workflow",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "stage": "evidence-contracts-validation-reference-analysis-and-reporting",
   "repository": "https://github.com/kardson/lammps-workflow-skill",
   "skill_root": ".",
@@ -70,12 +70,12 @@
       "matplotlib"
     ]
   },
-  "validation_scope": "183 local artificial-fixture tests: 182 passed, 1 Windows symlink-permission skip. External engine evidence remains bounded engineering only; no scientific applicability, production, long-run, multi-GPU or performance acceptance.",
+  "validation_scope": "Broader v0.5.2 suite: 183 run, 182 passed, 1 Windows symlink-permission skip. v0.5.3 changed comparison paths: 15 relevant tests passed and preserved static baseline metrics unchanged on local reevaluation. No new engine/inference or scientific acceptance.",
   "license": "UNSPECIFIED",
   "reference_deployment_evidence": "references/validated-deployment.md",
   "runtime_artifacts_bundled": false,
   "cli_contracts": "cli-contracts.json",
   "capability_registry": "capabilities.json",
   "release_notes": "references/release-notes.md",
-  "patch_validation": "Post-audit suite and explicit negative terminal parsing; historical receipt reparse preserves 32 pass/1 original failure"
+  "patch_validation": "Explicit pseudo-atom reference domain handling; ordinary/unknown declarations retained with limits"
 }

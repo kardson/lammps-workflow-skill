@@ -1,3 +1,14 @@
+# v0.5.3 — Reference species-domain visibility
+
+Reference samples preserve ordinary/pseudo/unknown atom representation. Explicit
+pseudo-atoms are retained as unsupported by this ordinary-element comparison
+adapter, with partial coverage rather than silently mapped or discarded. Legacy
+records without a declaration remain unqualified numerical diagnostics. Declared
+ordinary atoms still require physical source/domain review; no acceptance is granted.
+
+Fifteen relevant tests passed. Local reevaluation of preserved same-NEP static
+artifacts retained original energy/force metrics and coverage, without inference.
+
 # v0.5.2 — Explicit negative terminal tests
 
 Negative terminal cases can explicitly expect FAILED with one exact nonzero

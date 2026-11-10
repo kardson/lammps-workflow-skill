@@ -83,10 +83,13 @@ def evaluate_files(reference_file, prediction_file, metrics, output, plot=False)
     json_file(directory / 'evaluation.json', report)
     with (directory / 'samples.csv').open('x', encoding='utf-8', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=['id', 'prediction_status', 'energy_signed_error_eV_per_atom',
-                                   'force_component_mae_eV_per_angstrom', 'force_component_max_absolute_eV_per_angstrom', 'issues'])
+                                   'force_component_mae_eV_per_angstrom', 'force_component_max_absolute_eV_per_angstrom',
+                                   'species_representation', 'reference_domain_status', 'issues'])
         writer.writeheader()
         for sample in report['samples']:
             writer.writerow({'id': sample['id'], 'prediction_status': sample['prediction_status'],
+                'species_representation': sample['species_representation'],
+                'reference_domain_status': sample['reference_domain_status'],
                 'energy_signed_error_eV_per_atom': sample['metrics'].get('energy', {}).get('signed_error_eV_per_atom'),
                 'force_component_mae_eV_per_angstrom': sample['metrics'].get('forces', {}).get('mae'),
                 'force_component_max_absolute_eV_per_angstrom': sample['metrics'].get('forces', {}).get('max_absolute'),

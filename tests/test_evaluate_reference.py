@@ -12,6 +12,23 @@ from evaluate_reference import evaluate_files, load_artifact
 
 
 class EvaluationArtifacts(unittest.TestCase):
+    def test_pseudo_atom_cli_keeps_sample_and_returns_partial(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            refs, preds = self.artifacts(directory)
+            data = json.loads(refs.read_text())
+            data['records'][0]['species_representation'] = 'pseudo_atoms'
+            refs.write_text(json.dumps(data))
+            output = directory / 'partial'
+            child = subprocess.run([sys.executable, str(ROOT / 'tools/evaluate_reference.py'),
+                '--references', str(refs), '--predictions', str(preds), '--metric', 'forces',
+                '--output-directory', str(output)], capture_output=True, text=True)
+            self.assertEqual(child.returncode, 1, child.stderr)
+            report = json.loads((output / 'evaluation.json').read_text())
+            self.assertEqual(report['coverage']['forces']['valid'], 0)
+            self.assertEqual(report['total_reference_samples'], 1)
+            self.assertIn('PSEUDO_ATOM_ADAPTER_UNSUPPORTED', (output / 'samples.csv').read_text())
+
     def artifacts(self, directory):
         record = {'id': 'artificial', 'species': ['Ga'], 'energy_eV': -1,
                   'energy_reference': 'fixture-zero', 'dft_group': 'fixture-only',

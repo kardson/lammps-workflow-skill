@@ -8,6 +8,25 @@ from reference_metrics import evaluate
 
 
 class ReferenceMetrics(unittest.TestCase):
+    def test_pseudo_atoms_are_retained_without_ordinary_species_metrics(self):
+        self.reference['species_representation'] = 'pseudo_atoms'
+        report = evaluate([self.reference], [self.prediction])
+        self.assertEqual(report['status'], 'METRICS_PARTIAL')
+        self.assertEqual(report['total_reference_samples'], 1)
+        self.assertEqual(report['prediction_accounting']['declared_succeeded'], 1)
+        self.assertEqual(report['coverage']['forces']['unavailable'], 1)
+        self.assertEqual(report['samples'][0]['metrics'], {})
+        self.assertEqual(report['reference_domain_coverage']['pseudo_atoms'], 1)
+
+    def test_missing_representation_stays_unqualified_and_invalid_is_error(self):
+        report = evaluate([self.reference], [self.prediction])
+        self.assertEqual(report['samples'][0]['reference_domain_status'], 'UNQUALIFIED_DIAGNOSTIC')
+        self.reference['species_representation'] = 'ordinary_atoms'
+        self.assertEqual(evaluate([self.reference], [self.prediction])['coverage']['forces']['valid'], 1)
+        self.reference['species_representation'] = 'ordinary_by_guess'
+        with self.assertRaises(ValueError):
+            evaluate([self.reference], [self.prediction])
+
     def test_configuration_mismatch_and_repeated_metric_refused(self):
         self.reference['configuration_sha256'] = 'a' * 64
         self.prediction['configuration_sha256'] = 'b' * 64

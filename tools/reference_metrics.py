@@ -43,12 +43,23 @@ def evaluate(references, predictions, requested=('energy', 'forces')):
         coverage[metric].update(reference_labels_available=labeled, reference_labels_missing_or_invalid=len(refs) - labeled)
     for key, reference in refs.items():
         prediction = preds.get(key)
+        representation = reference.get('species_representation', 'unknown')
+        if representation not in ('ordinary_atoms', 'pseudo_atoms', 'unknown'):
+            raise ValueError('Unsupported reference species_representation')
         item = {'id': key, 'metrics': {}, 'issues': [], 'dft_group': reference.get('dft_group'),
+                'species_representation': representation,
+                'reference_domain_status': 'PSEUDO_ATOM_ADAPTER_UNSUPPORTED' if representation == 'pseudo_atoms' else 'UNQUALIFIED_DIAGNOSTIC' if representation == 'unknown' else 'ORDINARY_ATOMS_DECLARED_NOT_ACCEPTED',
                 'energy_reference': reference.get('energy_reference'),
                 'configuration_sha256': reference.get('configuration_sha256'),
                 'reference_provenance': reference.get('provenance', []),
                 'prediction_provenance': prediction.get('provenance', []) if prediction else []}
         reports.append(item)
+        if representation == 'pseudo_atoms':
+            item['prediction_status'] = 'MISSING' if prediction is None else prediction.get('status', 'UNKNOWN')
+            item['issues'].append('Pseudo-atom reference cannot be silently compared as ordinary element species; a separately justified physical mapping/adapter is required')
+            for metric in requested:
+                coverage[metric]['unavailable'] += 1
+            continue
         if prediction is None or prediction.get('status') != 'SUCCEEDED':
             item['prediction_status'] = 'MISSING' if prediction is None else prediction.get('status', 'UNKNOWN')
             item['issues'].append('Prediction missing or not successful: ' + str((prediction or {}).get('reason', '')))
@@ -148,6 +159,8 @@ def evaluate(references, predictions, requested=('energy', 'forces')):
                 'missing_records': sum(key not in preds for key in refs),
                 'other_status': sum(preds[key].get('status') not in ('SUCCEEDED', 'FAILED') for key in refs if key in preds)},
             'coverage': coverage, 'samples': reports, 'ranked_errors': ranked,
+            'reference_domain_coverage': {name: sum(sample['species_representation'] == name for sample in reports)
+                                          for name in ('ordinary_atoms', 'pseudo_atoms', 'unknown')},
             'force_components_by_species_eV_per_angstrom': {key: summary(values) for key, values in force_errors.items()},
             'energy_groups': [{'dft_group': key[0], 'energy_reference': key[1], 'composition': list(key[2]),
                                'errors_eV_per_atom': summary(values)} for key, values in energy_groups.items()],

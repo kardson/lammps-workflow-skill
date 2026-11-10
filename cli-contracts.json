@@ -787,7 +787,7 @@
       "execution": "Local existing-artifact comparison; no inference or MD",
       "contract_status": "SOURCE_REVIEWED",
       "inputs": "v1 reference/prediction JSON datasets, explicit metric selection and new output directory",
-      "outputs": "evaluation.json and samples.csv; optional evaluation.png",
+      "outputs": "Native evaluation JSON/CSV and optional PNG with coverage, failed/unsupported sample retention and reference species-domain status",
       "exit_codes": "0 complete metrics reported, not scientifically accepted; 1 partial metrics; 2 input/dependency/I/O/usage error",
       "side_effects": "Writes new local output directory; preserves partial artifacts on plot failure; never launches engine",
       "verification_scope": "Artificial artifact/CLI/coverage/provenance tests; no actual model precision evaluation"

@@ -489,7 +489,7 @@
       "contract_entrypoint": "tools/evaluate_reference.py",
       "category": "validation",
       "inputs": "v1 reference/prediction JSON datasets, explicit metric selection and new output directory",
-      "outputs": "evaluation.json and samples.csv; optional evaluation.png",
+      "outputs": "Native evaluation JSON/CSV and optional PNG with coverage, failed/unsupported sample retention and reference species-domain status",
       "dependencies": {
         "python": "selected Python interpreter",
         "optional_imports": [
