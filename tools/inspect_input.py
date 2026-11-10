@@ -1,4 +1,4 @@
-"""Read one LAMMPS input without evaluating variables, includes or commands."""
+"""Statically inspect literal input text and optional bounded includes; never execute commands."""
 import argparse
 import hashlib
 import json
@@ -162,7 +162,7 @@ def inspect_input(path, plan_path=None, include_root=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input', required=True)
-    parser.add_argument('--plan', help='Optional existing plan; only four literal fields are compared')
+    parser.add_argument('--plan', help='Optional plan: four simulation fields plus explicit selected-command input_contract comparisons')
     parser.add_argument('--output', required=True)
     parser.add_argument('--include-root', help='Explicit intended working directory for bounded literal include text expansion')
     args = parser.parse_args()

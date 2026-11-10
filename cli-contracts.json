@@ -517,7 +517,7 @@
       "contract_status": "SOURCE_REVIEWED",
       "inputs": "Explicit bounded variants and new output directory",
       "outputs": "Candidate manifests or nonexecutable sensitivity-plan.json with unresolved values and plan identity",
-      "exit_codes": "0 candidates prepared; 1 preparation/input/I/O failure; argparse usage errors exit 2",
+      "exit_codes": "0 candidates prepared or nonexecutable plan-only proposals written; 1 preparation/input/I/O failure; argparse usage errors exit 2",
       "side_effects": "Writes explicitly requested new local artifacts; may retain partial artifacts on failure; no MD, inference, submission or remote transfer",
       "verification_scope": "Source review; behavior coverage tracked separately in tests"
     },

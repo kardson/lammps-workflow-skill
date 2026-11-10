@@ -33,7 +33,7 @@
 
 工具需要 Python 3.10+；原有六项工具只需标准库，新增结构/分析/渲染按需使用 ASE、NumPy、SciPy、Matplotlib、OVITO/PySide6。详见 [本地工具链](references/local-toolchain.md)。流程说明见 [能力目录](references/capabilities.md)；安装了所需可选库后可用 `python -m unittest discover -s tests -v` 验证。集成演示为 `python tools/demo_local_pipeline.py --output-directory ABSOLUTE_NEW_DIRECTORY`，仅使用人工夹具。
 
-当前版本 v0.5.1，包含 27 个 CLI 入口。新增能力和兼容性说明见 [发布说明](references/release-notes.md)。许可尚未指定；公开可见不等于已授予再分发许可。[第三方说明](THIRD_PARTY.md)。
+当前版本 v0.5.2，包含 27 个 CLI 入口。新增能力和兼容性说明见 [发布说明](references/release-notes.md)。许可尚未指定；公开可见不等于已授予再分发许可。[第三方说明](THIRD_PARTY.md)。
 
 ## v0.5.0 新增能力
 

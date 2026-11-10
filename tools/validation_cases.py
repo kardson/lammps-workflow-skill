@@ -5,12 +5,26 @@ import math
 from pathlib import Path
 
 
+def expected_terminal(case):
+    state = case.get('expected_terminal_state', 'SUCCEEDED')
+    if state not in ('SUCCEEDED', 'FAILED'):
+        raise ValueError('Expected terminal state must be SUCCEEDED or FAILED')
+    if state == 'FAILED':
+        if case['parser'] not in ('termination_v1', 'lammps_single_line_v1'):
+            raise ValueError('Expected process failure requires a terminal parser')
+        checks = [check for check in case['checks'] if check['metric'] == 'exit_code']
+        if len(checks) != 1 or checks[0]['operator'] != 'eq' or type(checks[0]['value']) is not int or checks[0]['value'] == 0:
+            raise ValueError('Expected process failure requires one exact nonzero integer exit_code check')
+    return state
+
+
 def load_case(path):
     import jsonschema
     case = json.loads(Path(path).read_text(encoding='utf-8-sig'))
     schema = json.loads((Path(__file__).resolve().parents[1] /
                          'schemas/validation-case.schema.json').read_text(encoding='utf-8'))
     jsonschema.validate(case, schema)
+    expected_terminal(case)
     for item in case['inputs'] + case['expected_outputs']:
         safe_path(Path('.').resolve(), item['path'])
     if case['category'] in ('inference', 'md', 'performance', 'scientific') and case['execution_kind'] != 'engine':
@@ -53,6 +67,7 @@ def plan(cases, categories=None):
 
 def parse_termination(case, directory):
     """Only interprets terminal protocol and requested metrics, not engine physics."""
+    expected_state = expected_terminal(case)
     root = Path(directory).resolve(strict=True)
     result = {'case_id': case['case_id'], 'status': 'UNVERIFIED', 'checks': [],
               'missing_outputs': [], 'evidence': [], 'errors': [],
@@ -96,6 +111,8 @@ def parse_termination(case, directory):
         result['status'] = 'PARTIAL'
         return result
     code, state = receipt.get('exit_code'), receipt.get('state')
+    result['process_terminal_state'] = state
+    result['expected_terminal_state'] = expected_state
     if type(code) is not int or state not in ('SUCCEEDED', 'FAILED', 'STOPPED'):
         result['errors'].append('Missing/invalid exit code or terminal state')
     elif (state == 'SUCCEEDED') != (code == 0):
@@ -141,7 +158,7 @@ def parse_termination(case, directory):
             outcome = 'UNVERIFIED'
         result['checks'].append({'metric': metric, 'value': value, 'expected': expected,
                                  'operator': op, 'unit': check['unit'], 'status': outcome})
-    if state in ('FAILED', 'STOPPED') or any(c['status'] == 'FAILED' for c in result['checks']):
+    if (state in ('SUCCEEDED', 'FAILED', 'STOPPED') and state != expected_state) or any(c['status'] == 'FAILED' for c in result['checks']):
         result['status'] = 'FAILED'
     elif result['errors'] or result['missing_outputs']:
         result['status'] = 'PARTIAL'

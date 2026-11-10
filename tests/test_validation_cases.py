@@ -13,6 +13,36 @@ from validation_cases import load_case, plan, parse_termination
 
 
 class ValidationBehavior(unittest.TestCase):
+    def test_expected_negative_exit_is_separate_from_validation_failure(self):
+        self.case['checks'][0].update(value=1)
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            terminal = {'state': 'FAILED', 'exit_code': 1}
+            self.assertEqual(self.parse(directory, terminal)['status'], 'FAILED')
+            self.case['expected_terminal_state'] = 'FAILED'
+            result = self.parse(directory, terminal)
+            self.assertEqual(result['status'], 'PASSED')
+            self.assertEqual(result['process_terminal_state'], 'FAILED')
+            path = directory / 'negative-case.json'
+            path.write_text(json.dumps(self.case))
+            child = subprocess.run([sys.executable, str(ROOT / 'tools/run_validation.py'),
+                '--operation', 'parse', '--case', str(path), '--result-directory', str(directory)],
+                capture_output=True, text=True)
+            self.assertEqual(child.returncode, 0, child.stderr)
+            self.assertEqual(json.loads(child.stdout)['process_terminal_state'], 'FAILED')
+            self.assertEqual(self.parse(directory, {'state': 'SUCCEEDED', 'exit_code': 0})['status'], 'FAILED')
+            self.assertEqual(self.parse(directory, {'state': 'FAILED', 'exit_code': 2})['status'], 'FAILED')
+            self.case['expected_outputs'].append({'path': 'missing', 'required': True})
+            self.assertEqual(self.parse(directory, terminal)['status'], 'PARTIAL')
+
+    def test_expected_failure_requires_exact_nonzero_exit(self):
+        self.case['expected_terminal_state'] = 'FAILED'
+        with tempfile.TemporaryDirectory() as tmp:
+            for value in (0, True, None, 1.0):
+                self.case['checks'][0]['value'] = value
+                with self.assertRaises(ValueError):
+                    parse_termination(self.case, tmp)
+
     def test_historical_threshold_and_identity_never_imply_new_execution(self):
         with tempfile.TemporaryDirectory() as tmp:
             directory = Path(tmp)

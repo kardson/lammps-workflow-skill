@@ -13,3 +13,15 @@ The additional `lammps_single_line_v1` parser reuses the streaming log reader on
 `historical_record_v1` selects one object through historical_source {path,pointer,observed_date}. The source must be in inputs with its digest. It compares explicitly declared scalar fields/thresholds, preserves HISTORICAL_NOT_RERUN, and never creates terminal records. Sources are limited to 16 MiB. This checks preserved receipt fields, not raw energy/force recomputation. Corrupt pointers, changed identities, missing fields and failed checks cannot pass. Historical definitions must not be submitted as executable requests.
 
 Private deployments may supply an explicit execution adapter; no engine execution is bundled in this public CLI. Further raw numerical comparison parsers remain pending. Selecting all categories must never implicitly authorize them. Missing outputs, failed predictions and unsupported parsers must remain visible rather than becoming zero-valued metrics or passes. The synthetic receipt example proves software parsing only.
+
+For a deliberately negative terminal test, explicitly set
+`expected_terminal_state: "FAILED"` and declare exactly one `exit_code` check with
+`operator: "eq"` and an integer nonzero `value`, with the usual unit/source.
+Without this field, expected process termination remains `SUCCEEDED`. The report
+retains `process_terminal_state` and `expected_terminal_state` separately from
+the validation `status`. An expected nonzero exit can pass the declared check;
+a different exit, missing required output or inconsistent receipt cannot.
+This option applies only to terminal parsers. It does not prove a clean KOKKOS
+shutdown, the intended diagnostic message or absence of parser errors; those
+need explicit supported evidence checks or separate inspection. Existing historical
+case results are not rewritten or reclassified by this declaration.

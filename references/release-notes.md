@@ -1,3 +1,16 @@
+# v0.5.2 — Explicit negative terminal tests
+
+Negative terminal cases can explicitly expect FAILED with one exact nonzero
+integer exit-code check. Process state is retained separately from validation
+outcome. Existing cases still expect successful termination by default. Missing
+outputs, inconsistent receipts and unsupported checks cannot become passes.
+This does not by itself verify diagnostic text or clean KOKKOS shutdown.
+
+Input inspection help now describes explicit command contracts and bounded
+includes accurately; the sweep contract names nonexecutable plan-only output.
+Post-audit verification ran 183 local tests: 182 passed and one Windows
+symlink-permission test was skipped. No new engine run or inference occurred.
+
 # v0.5.1 — Explicit compatibility qualification
 
 Compatibility queries now accept optional exact `--interface` and `--precision`
