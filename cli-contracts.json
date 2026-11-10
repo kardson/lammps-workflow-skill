@@ -689,6 +689,18 @@
             "--scenario"
           ],
           "required": true
+        },
+        {
+          "names": [
+            "--precision"
+          ],
+          "required": false
+        },
+        {
+          "names": [
+            "--interface"
+          ],
+          "required": false
         }
       ],
       "argument_source": "AST static inspection",

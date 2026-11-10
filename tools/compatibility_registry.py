@@ -7,7 +7,7 @@ DIMENSIONS = ('installation', 'numerical', 'mpi', 'deposition', 'restart', 'phys
 def load_evidence(path):
     path = Path(path).resolve()
     document = json.loads(path.read_text(encoding='utf-8-sig'))
-    if not isinstance(document, dict) or document.get('schema_version') != 1 or not isinstance(document.get('records'), list):
+    if not isinstance(document, dict) or type(document.get('schema_version')) is not int or document.get('schema_version') != 1 or not isinstance(document.get('records'), list):
         raise ValueError('Expected v1 compatibility evidence records')
     records = []
     for record in document['records']:
@@ -16,6 +16,9 @@ def load_evidence(path):
             raise ValueError('Malformed compatibility record')
         if record['dimension'] not in DIMENSIONS or record['status'] not in ('PASSED', 'FAILED', 'UNVERIFIED', 'PARTIAL'):
             raise ValueError('Unsupported compatibility dimension/status')
+        for field in ('precision', 'interface'):
+            if record.get(field) is not None and (not isinstance(record[field], str) or not record[field].strip()):
+                raise ValueError(field + ' must be a nonempty string or null')
         sources = record.get('evidence')
         if not isinstance(sources, list) or not sources or not all(isinstance(value, str) for value in sources):
             raise ValueError('Compatibility records require evidence path references')
@@ -28,11 +31,16 @@ def load_evidence(path):
     return records
 
 
-def query(records, model_sha256, engine_id, scenario):
+def query(records, model_sha256, engine_id, scenario, precision=None, interface=None):
     if not all(isinstance(value, str) and value for value in (model_sha256, engine_id, scenario)):
         raise ValueError('Explicit model identity, engine ID and scenario are required')
+    for field, value in (('precision', precision), ('interface', interface)):
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            raise ValueError(field + ' must be a nonempty string when selected')
     selected = [record for record in records if record.get('model_sha256') == model_sha256
-                and record.get('engine_id') == engine_id and record.get('scenario') == scenario]
+                and record.get('engine_id') == engine_id and record.get('scenario') == scenario
+                and (precision is None or record.get('precision') == precision)
+                and (interface is None or record.get('interface') == interface)]
     dimensions = {}
     for name in DIMENSIONS:
         evidence = [record for record in selected if record.get('dimension') == name]
@@ -44,4 +52,6 @@ def query(records, model_sha256, engine_id, scenario):
             status = 'PASSED_RECORDED'
         dimensions[name] = {'status': status, 'records': evidence}
     return {'model_sha256': model_sha256, 'engine_id': engine_id, 'scenario': scenario,
+            'precision': precision, 'interface': interface,
+            'qualification': 'EXPLICIT_INTERFACE_AND_PRECISION' if precision is not None and interface is not None else 'NOT_FULLY_INTERFACE_PRECISION_QUALIFIED',
             'dimensions': dimensions, 'scope': 'Matching recorded evidence only; no runtime observation, evidence authenticity or scientific acceptance.'}

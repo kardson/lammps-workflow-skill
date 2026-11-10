@@ -10,6 +10,28 @@ from compatibility_registry import query, load_evidence
 
 
 class CompatibilityRegistry(unittest.TestCase):
+    def test_precision_interface_and_unknown_evidence_do_not_cross_match(self):
+        record = {'model_sha256': 'm', 'engine_id': 'e', 'scenario': 's',
+                  'dimension': 'numerical', 'status': 'PASSED',
+                  'precision': 'double', 'interface': 'native'}
+        self.assertEqual(query([record], 'm', 'e', 's', 'double', 'native')['dimensions']['numerical']['status'], 'PASSED_RECORDED')
+        for precision, interface in [('single', 'native'), ('double', 'kokkos')]:
+            result = query([record], 'm', 'e', 's', precision, interface)
+            self.assertEqual(result['dimensions']['numerical']['status'], 'UNVERIFIED')
+        legacy = dict(record); legacy.pop('precision')
+        self.assertEqual(query([legacy], 'm', 'e', 's', 'double', 'native')['dimensions']['numerical']['status'], 'UNVERIFIED')
+        self.assertEqual(query([record], 'm', 'e', 's')['qualification'], 'NOT_FULLY_INTERFACE_PRECISION_QUALIFIED')
+
+    def test_precision_metadata_malformed_is_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'evidence.json'
+            for value in (12, [], ''):
+                path.write_text(json.dumps({'schema_version': 1, 'records': [
+                    {'model_sha256': 'm', 'engine_id': 'e', 'scenario': 's', 'dimension': 'numerical',
+                     'status': 'PASSED', 'precision': value, 'evidence': ['missing']}]}))
+                with self.assertRaises(ValueError):
+                    load_evidence(path)
+
     def test_cli_failure_and_malformed_file(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

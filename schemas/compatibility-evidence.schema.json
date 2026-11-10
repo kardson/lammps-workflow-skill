@@ -59,6 +59,20 @@
               "type": "string",
               "minLength": 1
             }
+          },
+          "precision": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          },
+          "interface": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
           }
         }
       }

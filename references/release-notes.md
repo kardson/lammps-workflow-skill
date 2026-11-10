@@ -1,3 +1,11 @@
+# v0.5.1 — Explicit compatibility qualification
+
+Compatibility queries now accept optional exact `--interface` and `--precision`
+filters. Missing or different metadata cannot satisfy a selected combination.
+Legacy queries remain available but explicitly report incomplete qualification.
+No historical evidence is assigned guessed precision. Ten relevant regression
+tests passed; no new engine execution or potential inference was performed.
+
 # v0.5.0 — Evidence contracts and local analysis
 
 This release keeps the six-step research workflow and empirical/pretrained-ML

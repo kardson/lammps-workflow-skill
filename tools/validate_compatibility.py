@@ -10,9 +10,12 @@ def main():
     parser.add_argument('--model-sha256', required=True)
     parser.add_argument('--engine-id', required=True)
     parser.add_argument('--scenario', required=True)
+    parser.add_argument('--precision')
+    parser.add_argument('--interface')
     args = parser.parse_args()
     try:
-        report = query(load_evidence(args.evidence), args.model_sha256, args.engine_id, args.scenario)
+        report = query(load_evidence(args.evidence), args.model_sha256, args.engine_id, args.scenario,
+                       args.precision, args.interface)
     except (ValueError, OSError) as error:
         print(json.dumps({'status': 'ERROR', 'message': str(error)}))
         return 2

@@ -1,6 +1,6 @@
 {
   "skill": "lammps-md-workflow",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "stage": "evidence-contracts-validation-reference-analysis-and-reporting",
   "repository": "https://github.com/kardson/lammps-workflow-skill",
   "skill_root": ".",
@@ -76,5 +76,6 @@
   "runtime_artifacts_bundled": false,
   "cli_contracts": "cli-contracts.json",
   "capability_registry": "capabilities.json",
-  "release_notes": "references/release-notes.md"
+  "release_notes": "references/release-notes.md",
+  "patch_validation": "10 relevant tests passed for interface/precision matching and CLI/registry consistency; v0.5.0 broader evidence retained"
 }
