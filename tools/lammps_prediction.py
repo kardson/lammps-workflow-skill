@@ -7,6 +7,7 @@ import shlex
 
 from local_common import identity
 from parse_log import parse_log
+from restricted_cell import cell_values
 
 
 def configuration_identity(configuration):
@@ -14,12 +15,14 @@ def configuration_identity(configuration):
                  'boundary': configuration['boundary'],
                  'bounds_angstrom': [[float(x) for x in row] for row in configuration['bounds_angstrom']],
                  'positions_angstrom': [[float(x) for x in row] for row in configuration['positions_angstrom']]}
+    if 'tilt_angstrom' in configuration:
+        canonical['tilt_angstrom'] = cell_values(configuration)[1]
     raw = json.dumps(canonical, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
     return hashlib.sha256(raw).hexdigest()
 
 
 def static_dump(path, maximum_atoms):
-    """One orthogonal x/y/z+force frame, indexed by atom ID."""
+    """One orthogonal/restricted-triclinic Cartesian force frame by atom ID."""
     if type(maximum_atoms) is not int or maximum_atoms < 1:
         raise ValueError('Positive integer atom budget required')
     with Path(path).open(encoding='utf-8') as stream:
@@ -37,13 +40,24 @@ def static_dump(path, maximum_atoms):
         if not 0 < count <= maximum_atoms:
             raise ValueError('Static prediction atom count exceeds explicit bound or is empty')
         box = line().split()
-        if len(box) != 6 or box[:3] != ['ITEM:', 'BOX', 'BOUNDS'] or any(x in box for x in ('xy', 'xz', 'yz')):
-            raise ValueError('Only orthogonal static dump boxes supported')
-        if any(flag not in ('pp', 'ff', 'ss', 'mm', 'fs', 'sf', 'fm', 'mf', 'sm', 'ms') for flag in box[3:]):
+        triclinic = len(box) == 9 and box[:6] == ['ITEM:', 'BOX', 'BOUNDS', 'xy', 'xz', 'yz']
+        orthogonal = len(box) == 6 and box[:3] == ['ITEM:', 'BOX', 'BOUNDS']
+        if not (orthogonal or triclinic):
+            raise ValueError('Only orthogonal or restricted-triclinic static dump boxes supported')
+        flags = box[6:] if triclinic else box[3:]
+        if any(flag not in ('pp', 'ff', 'ss', 'mm', 'fs', 'sf', 'fm', 'mf', 'sm', 'ms') for flag in flags):
             raise ValueError('Invalid static boundary flags')
         bounds = [[float(x) for x in line().split()] for _ in range(3)]
-        if any(len(row) != 2 or not all(math.isfinite(x) for x in row) or row[0] >= row[1] for row in bounds):
+        if any(len(row) != (3 if triclinic else 2) or not all(math.isfinite(x) for x in row) or row[0] >= row[1] for row in bounds):
             raise ValueError('Invalid static prediction box')
+        tilt = [row[2] for row in bounds] if triclinic else [0.0, 0.0, 0.0]
+        if triclinic:
+            xy, xz, yz = tilt
+            bounds = [[bounds[0][0] - min(0.0, xy, xz, xy + xz),
+                       bounds[0][1] - max(0.0, xy, xz, xy + xz)],
+                      [bounds[1][0] - min(0.0, yz), bounds[1][1] - max(0.0, yz)],
+                      bounds[2][:2]]
+        bounds, tilt = cell_values({'bounds_angstrom': bounds, 'tilt_angstrom': tilt})
         header = line().split()
         if header[:2] != ['ITEM:', 'ATOMS']:
             raise ValueError('Static dump atom section missing')
@@ -65,7 +79,7 @@ def static_dump(path, maximum_atoms):
             atoms[key] = {'type': atom_type, 'position': position, 'force': force}
         if stream.read().strip():
             raise ValueError('Multiple frames/trailing data unsupported for static prediction')
-    return {'step': step, 'bounds': bounds, 'boundary': box[3:], 'atoms': atoms}
+    return {'step': step, 'bounds': bounds, 'tilt_angstrom': tilt, 'boundary': flags, 'atoms': atoms}
 
 
 def import_sample(sample, base):
@@ -102,6 +116,7 @@ def import_sample(sample, base):
         configuration = sample['configuration']
         if configuration_identity(configuration) != sample['configuration_sha256']:
             raise ValueError('Requested configuration identity mismatch')
+        expected_bounds, expected_tilt = cell_values(configuration)
         count = len(configuration['species'])
         ids = configuration['atom_ids']
         if len(ids) != count or len(set(ids)) != count or any(type(key) is not int or key <= 0 for key in ids):
@@ -118,7 +133,7 @@ def import_sample(sample, base):
             raise ValueError('Explicit bounded geometry tolerance required (0 through 1e-5 angstrom)')
         def close(observed, expected):
             return len(observed) == len(expected) and all(math.isfinite(float(x)) and abs(a - float(x)) <= tolerance for a, x in zip(observed, expected))
-        if any(not close(row, expected) for row, expected in zip(frame['bounds'], configuration['bounds_angstrom'])):
+        if any(not close(row, expected) for row, expected in zip(frame['bounds'], expected_bounds)) or not close(frame['tilt_angstrom'], expected_tilt):
             raise ValueError('Prediction cell differs from requested structure')
         order = sample['type_order']
         if not isinstance(order, list) or not order or len(set(order)) != len(order):

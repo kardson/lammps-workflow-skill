@@ -1,4 +1,4 @@
-"""Prepare an orthogonal atomic run-0 candidate; never launches inference."""
+"""Prepare an orthogonal/restricted-triclinic run-0 candidate; no inference."""
 import argparse
 import hashlib
 import json
@@ -9,6 +9,7 @@ import shutil
 from lammps_prediction import configuration_identity
 from local_common import identity, json_file, load_config, new_directory, number, resolve_file
 from prepare_input_package import tokens
+from restricted_cell import cell_values, fractional
 
 
 def validate_configuration(configuration, type_order, masses, maximum_atoms):
@@ -23,21 +24,18 @@ def validate_configuration(configuration, type_order, masses, maximum_atoms):
         raise ValueError('Explicit masses required for every declared type')
     for symbol in type_order:
         number(masses[symbol], 'mass ' + symbol, positive=True)
-    bounds = configuration['bounds_angstrom']
-    if len(bounds) != 3 or any(len(row) != 2 or number(row[0], 'lower') >= number(row[1], 'upper') for row in bounds):
-        raise ValueError('Explicit finite increasing orthogonal bounds required')
+    bounds, tilt = cell_values(configuration)
     boundary = configuration['boundary']
     if not isinstance(boundary, list) or len(boundary) != 3 or any(flag not in ('pp', 'ff') for flag in boundary):
-        raise ValueError('Static preparation supports fixed orthogonal p/f boundaries only')
+        raise ValueError('Static preparation supports fixed p/f boundaries only')
     positions = configuration['positions_angstrom']
     if len(positions) != len(species):
         raise ValueError('Position/species dimensions differ')
     for position in positions:
         if len(position) != 3:
             raise ValueError('Three Cartesian coordinates required')
-        for value, (lower, upper), flag in zip(position, bounds, boundary):
-            number(value, 'position')
-            if value < lower or value > upper or flag == 'pp' and value == upper:
+        for value, flag in zip(fractional(position, bounds, tilt), boundary):
+            if value < 0 or value > 1 or flag == 'pp' and value == 1:
                 raise ValueError('Position outside box or on periodic upper face; no automatic wrapping')
     return configuration_identity(configuration)
 
@@ -88,6 +86,8 @@ def prepare(config, base, output):
     data = ['Static prediction candidate; no execution authorization', '', f"{len(configuration['species'])} atoms",
             f'{len(order)} atom types', '']
     data += [f'{float(row[0]):.17g} {float(row[1]):.17g} {axis}lo {axis}hi' for row, axis in zip(configuration['bounds_angstrom'], 'xyz')]
+    if 'tilt_angstrom' in configuration:
+        data += [' '.join(f'{x:.17g}' for x in cell_values(configuration)[1]) + ' xy xz yz']
     data += ['', 'Masses', ''] + [f'{i + 1} {float(config["masses_amu"][symbol]):.17g}' for i, symbol in enumerate(order)]
     data += ['', 'Atoms # atomic', '']
     data += [' '.join([str(key), str(order.index(symbol) + 1), *(f'{float(x):.17g}' for x in position)])
@@ -119,7 +119,7 @@ def prepare(config, base, output):
               'expected_outputs': ['log.lammps', 'final.dump', 'termination.json'], 'expected_step': 0,
               'unresolved_engine_identity_fields': unresolved_engine,
               'scientific_acceptance': 'UNVERIFIED', 'execution_authorized': False,
-              'inference_performed': False, 'limits': ['Orthogonal atomic fixed p/f boxes only',
+              'inference_performed': False, 'limits': ['Orthogonal/restricted-triclinic atomic fixed p/f boxes only; supplied Cartesian frame is preserved',
               'Pair syntax supplied explicitly, not proven compatible or physically valid',
               'No energy reference alignment or stress conversion', 'Execution uses a separately authorized engine attempt']}
     json_file(directory / 'preparation.json', report)

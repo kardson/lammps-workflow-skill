@@ -1,3 +1,7 @@
+# v0.5.5 — Restricted-triclinic static candidates and imports
+
+Adds optional explicit xy/xz/yz tilt to static configurations, fractional containment, data-file tilt serialization and dump bounding-box inversion. Tilt participates in identity when supplied; old no-tilt identities stay unchanged. Cartesian force frame is preserved, not automatically rotated. General-triclinic dump/automatic basis conversion/stress import are not added. No new inference or engine validation occurred.
+
 # v0.5.4 — External-field preparation guidance
 
 Adds a discoverable agent-guided route for charged transport, electric/material magnetic response and CSS arrival-boundary separation. Documents explicit model-head selection, field timing/MPI/restart checks and branch-specific validation limits. No executable tools, engine support, weights or physical validation added; the 27 CLI contracts are unchanged.

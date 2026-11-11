@@ -524,7 +524,7 @@
       "engine_help_only": false,
       "side_effects": "Reads identified artifacts and writes a new local output directory; never launches engine",
       "limits_reference": "references/reference-evaluation.md",
-      "supported_scope": "Bounded existing orthogonal static metal-unit LAMMPS outputs; no engine launch or model/DFT energy alignment"
+      "supported_scope": "Bounded existing orthogonal/restricted-triclinic static metal-unit LAMMPS outputs; no engine launch or model/DFT energy alignment"
     },
     {
       "id": "prepare_static_prediction",

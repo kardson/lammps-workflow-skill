@@ -31,7 +31,7 @@ All bundled tools support `--help`. Resolve them from the skill root, using the 
 | Validate linked plans, audits and attempt records | `tools/validate_case.py --help` | Schema/reference checks; not scientific approval or a live host query |
 | Compare runtime/model compatibility | `tools/validate_compatibility.py --help` | Explicit registry facts and unresolved evidence; no inferred interaction physics |
 | Prepare and parse engineering validation cases | `tools/run_validation.py --help` | Case plans or existing-output checks, no engine launch |
-| Prepare static prediction inputs | `tools/prepare_static_prediction.py --help` | Explicit run-0 candidate package with identities; no model inference |
+| Prepare static prediction inputs | `tools/prepare_static_prediction.py --help` | Explicit orthogonal/restricted-triclinic run-0 candidates with identities; no model inference |
 | Import existing static energy/force outputs | `tools/import_predictions.py --help` | Geometry/atom mapping and terminal evidence checks; failed samples retained |
 | Evaluate comparable reference labels | `tools/evaluate_reference.py --help` | Energy/force/stress metrics and coverage, without fitted energy offsets or acceptance |
 | Audit declared stages and observations | `tools/inspect_stages.py --help` | Contract/link/condition checks, without equilibrium certification or process control |

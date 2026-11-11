@@ -1,6 +1,6 @@
 {
   "skill": "lammps-md-workflow",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "stage": "evidence-contracts-validation-reference-analysis-and-reporting",
   "repository": "https://github.com/kardson/lammps-workflow-skill",
   "skill_root": ".",
@@ -70,12 +70,12 @@
       "matplotlib"
     ]
   },
-  "validation_scope": "Broader v0.5.2 suite: 183 run, 182 passed, 1 Windows symlink-permission skip. v0.5.3 changed comparison paths: 15 relevant tests passed and preserved static baseline metrics unchanged on local reevaluation. No new engine/inference or scientific acceptance. v0.5.4 documentation-only: skill frontmatter validator, changed-page relative links and private-identifier review passed; no tool or runtime changes.",
+  "validation_scope": "Broader v0.5.2 suite: 183 run, 182 passed, 1 Windows symlink-permission skip. v0.5.3 changed comparison paths: 15 relevant tests passed and preserved static baseline metrics unchanged on local reevaluation. No new engine/inference or scientific acceptance. v0.5.4 documentation-only: skill frontmatter validator, changed-page relative links and private-identifier review passed; no tool or runtime changes. v0.5.5: 14 targeted prediction/geometry tests and independent ASE restricted-cell/ID position readback passed; no engine or model run.",
   "license": "UNSPECIFIED",
   "reference_deployment_evidence": "references/validated-deployment.md",
   "runtime_artifacts_bundled": false,
   "cli_contracts": "cli-contracts.json",
   "capability_registry": "capabilities.json",
   "release_notes": "references/release-notes.md",
-  "patch_validation": "Documentation-only external-field/CSS routing and model/field validation guidance; no new runtime capability"
+  "patch_validation": "Restricted-triclinic static preparation/import: 14 targeted prediction/geometry tests, independent ASE data readback. No new engine/inference."
 }
