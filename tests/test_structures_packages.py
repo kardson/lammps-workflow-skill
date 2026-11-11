@@ -249,6 +249,13 @@ class StructureAndPackageTests(unittest.TestCase):
                                        pair_style=['nep'], pair_coeff=[['*', '*', '@potential_file:0', 'Si', 'C']])
             result = prepare_package(config, root, root / 'package')
             self.assertEqual((root / 'package/models/potential-0.txt').read_bytes(), raw)
+            self.assertEqual(result['potential_copies'][0]['package_file'], 'models/potential-0.txt')
+            import json
+            portable = json.loads((root / 'package/configuration.json').read_text())
+            self.assertEqual(portable['potential']['files'], ['models/potential-0.txt'])
+            from validation_cases import safe_path
+            for item in result['file_identities']:
+                self.assertTrue(safe_path(root / 'package', item['package_file']).is_file())
             self.assertEqual(result['potential_header_checks'][0]['element_count'], 3)
             self.assertEqual(result['potential_header_checks'][0]['scientific_suitability'], 'UNVERIFIED')
             self.assertFalse(result['simulation_run'])

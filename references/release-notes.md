@@ -1,3 +1,7 @@
+# v0.5.6 — Portable copied-model paths
+
+Input packages generated on Windows now record copied-model paths with POSIX separators, so Linux validation and execution resolve the same package member. Regression checks cover metadata, configuration and file identities. Fifteen structure/package and five delivery tests passed. No engine, potential or physical-accuracy claim changes.
+
 # v0.5.5 — Restricted-triclinic static candidates and imports
 
 Adds optional explicit xy/xz/yz tilt to static configurations, fractional containment, data-file tilt serialization and dump bounding-box inversion. Tilt participates in identity when supplied; old no-tilt identities stay unchanged. Cartesian force frame is preserved, not automatically rotated. General-triclinic dump/automatic basis conversion/stress import are not added. No new inference or engine validation occurred.

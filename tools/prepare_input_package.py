@@ -229,7 +229,7 @@ def prepare(config, base, output):
         copied_identity = identity(target)
         if before['sha256'] != copied_identity['sha256']:
             raise ValueError('Potential copy identity mismatch.')
-        copied.append({'source': before, 'package_file': str(target.relative_to(output)), 'identity': copied_identity})
+        copied.append({'source': before, 'package_file': target.relative_to(output).as_posix(), 'identity': copied_identity})
     json_file(output / 'type-map.json', {str(i + 1): symbol for i, symbol in enumerate(order)})
     portable = copy.deepcopy(config)
     portable['structure_file'] = 'structure.extxyz'
