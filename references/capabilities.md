@@ -53,3 +53,5 @@ The structure/analysis/render helpers have optional scientific-library dependenc
 ## External reference deployment, now exercised
 
 CPU/GPU installations and bounded inference/MPI/open-boundary/insertion/same-engine restart checks have passed in a separate reference deployment. The model-file GPU exit defect was repaired there and regression-tested. See [validated combination and exact scope](validated-deployment.md). These are agent-guided capabilities with actual external execution evidence; they are not new bundled job submission or build adapters. The public tool installation remains portable and contains no working host configuration, binaries, patch deployment, weights or raw research outputs.
+
+External-field/CSS coupling preparation is [agent-guided](external-fields.md): mechanism selection, response-model/interface source review and branch-specific validation planning. No field-aware executable, potential loader, field generator or magnetic-response model is bundled or newly validated.

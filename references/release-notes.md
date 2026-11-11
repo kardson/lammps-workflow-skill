@@ -1,3 +1,7 @@
+# v0.5.4 — External-field preparation guidance
+
+Adds a discoverable agent-guided route for charged transport, electric/material magnetic response and CSS arrival-boundary separation. Documents explicit model-head selection, field timing/MPI/restart checks and branch-specific validation limits. No executable tools, engine support, weights or physical validation added; the 27 CLI contracts are unchanged.
+
 # v0.5.3 — Reference species-domain visibility
 
 Reference samples preserve ordinary/pseudo/unknown atom representation. Explicit

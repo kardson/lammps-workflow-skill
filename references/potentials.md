@@ -15,3 +15,5 @@ NEP_CPU and MatPL/NEP KOKKOS are independent integration routes. Check their exa
 For growth, seek evidence for bulk phases, surface reconstructions, strain, interfaces, adsorption/diffusion and arriving species/energies as relevant. Reactive precursors need the relevant chemical species and reaction coverage. Where evidence is absent, propose validation or a narrower claim; a universal model name does not establish target-system accuracy.
 
 Sources: [LAMMPS potential guidance](https://docs.lammps.org/pair_style.html), [NIST repository](https://www.ctcms.nist.gov/potentials/), [NEP_CPU](https://github.com/brucefan1983/NEP_CPU), [GPUMD](https://github.com/brucefan1983/GPUMD), [MatPL LAMMPS interface](https://github.com/LonxunQuantum/lammps-MatPL). Check the exact interface release before preparing executable input.
+
+For field-driven growth, use [external-field coupling](external-fields.md) to distinguish coordinate-only, charge/polarization and magnetic models and their actual runtime interfaces.
